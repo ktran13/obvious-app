@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Portability is a locked decision: the app must stay deployable anywhere,
+      # so cloud-provider SDKs are banned from dependencies.
+      - name: Portability gate — no cloud-provider SDKs
+        run: |
+          if grep -nE '"@aws-sdk/|"@azure/' package.json; then
+            echo "::error::Cloud-provider SDK dependencies (@aws-sdk/*, @azure/*) are not allowed."
+            exit 1
+          fi
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
