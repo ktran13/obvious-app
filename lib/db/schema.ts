@@ -108,14 +108,17 @@ export const accounts = pgTable(
     type: text("type").notNull(), // "oauth" | "oidc" | "email" | "credentials"
     provider: text("provider").notNull(),
     providerAccountId: text("provider_account_id").notNull(),
-    refreshToken: text("refresh_token"),
-    accessToken: text("access_token"),
-    expiresAt: integer("expires_at"), // unix seconds
-    tokenType: text("token_type"),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"), // unix seconds
+    token_type: text("token_type"),
     scope: text("scope"),
-    idToken: text("id_token"),
-    sessionState: text("session_state"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
   },
+  // JS keys are the adapter's snake_case names (refresh_token, access_token, …)
+  // because @auth/drizzle-adapter accesses columns by key, not by DB name.
+  // Postgres column names are unchanged, so no migration churn.
   (t) => [primaryKey({ columns: [t.provider, t.providerAccountId] })],
 );
 
