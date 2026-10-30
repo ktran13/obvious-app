@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 /**
  * The binding acceptance flow: anonymous save click → sign-in prompt →
  * mock sign-in → save succeeds → item visible on /profile → unsave removes it.
- * Requires demo data seeded: pnpm db:seed.
+ * Requires demo data seeded: pnpm db:seed:demo.
  */
 
 const EVENT_TITLE = "Indie Web Makers Meetup";

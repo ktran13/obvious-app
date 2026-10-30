@@ -3,7 +3,7 @@ import { defineConfig } from "@playwright/test";
 /**
  * E2E for the auth + save flow. Starts the Next dev server itself with the
  * dev mock provider enabled; requires migrations applied and demo data
- * seeded (pnpm db:migrate && pnpm db:seed). Run: pnpm e2e
+ * seeded (pnpm db:migrate && pnpm db:seed:demo). Run: pnpm e2e
  */
 export default defineConfig({
   testDir: "./e2e",

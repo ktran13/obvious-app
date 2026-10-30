@@ -69,8 +69,8 @@ data — no bulk scraping:
   `meetup` (api, disabled).
 - **Events** — several hundred future-dated listings expanded deterministically
   from curated templates (`seed/fixtures.ts`) across all interest categories,
-  persona tags, and neighborhoods. External ids are derived from the template,
-  week, and weekday, so re-running the seed updates in place — the event count
+  persona tags, and neighborhoods. External ids embed the template slug and
+  the event date, so re-running the seed updates in place — the event count
   and the `(source_id, external_id)` set are identical after every run.
 - **Communities / organizers** — upserted by slug.
 - **Job postings** — keyed by `apply_url`; re-runs only add what is missing.

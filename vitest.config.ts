@@ -10,6 +10,11 @@ export default defineConfig({
     },
   },
   test: {
+    // DB- and Postgres-backed test files (ingest sync/seed, schema, saves)
+    // TRUNCATE shared tables in the one compose/CI Postgres; parallel files
+    // truncate each other's fixtures mid-test. Serializing files keeps that
+    // shared state safe. Inherited by every project below.
+    fileParallelism: false,
     projects: [
       // Backend / pure-node tests (no DOM).
       {
@@ -32,9 +37,5 @@ export default defineConfig({
         },
       },
     ],
-    // DB-backed test files (schema, saves) TRUNCATE shared tables in the one
-    // compose/CI Postgres; running them in parallel truncates each other's
-    // fixtures mid-test. Serializing files keeps that shared state safe.
-    fileParallelism: false,
   },
 });
