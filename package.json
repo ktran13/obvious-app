@@ -17,7 +17,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
-    "db:seed": "tsx lib/ingest/seed/seed.ts",
+    "db:seed": "tsx lib/ingest/seed/seed.ts && tsx scripts/seed-demo.ts && node scripts/seed.mjs",
     "db:seed:demo": "tsx scripts/seed-demo.ts",
     "e2e": "playwright test"
   },
