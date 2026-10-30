@@ -14,8 +14,10 @@ const badgeVariants = cva(
         // never white (contrast lock L3: ~5.9:1 on #FF48B0, WCAG AA pass).
         selected: "bg-ink-magenta text-ink-black",
         // FREE/TONIGHT sticker: starburst clip, magenta fill, ink text.
+        // riso-wiggle is the paper-craft signature (deliverable 6): one
+        // gentle oscillation on hover, a fade under reduced motion.
         starburst:
-          "bg-ink-magenta text-ink-black rounded-none border-0 px-3 py-2 [clip-path:polygon(50%_0%,59%_13%,74%_8%,77%_24%,93%_24%,86%_39%,100%_50%,86%_61%,93%_76%,77%_76%,74%_92%,59%_87%,50%_100%,41%_87%,26%_92%,23%_76%,7%_76%,14%_61%,0%_50%,14%_39%,7%_24%,23%_24%,26%_8%,41%_13%)]",
+          "bg-ink-magenta text-ink-black riso-wiggle rounded-none border-0 px-3 py-2 [clip-path:polygon(50%_0%,59%_13%,74%_8%,77%_24%,93%_24%,86%_39%,100%_50%,86%_61%,93%_76%,77%_76%,74%_92%,59%_87%,50%_100%,41%_87%,26%_92%,23%_76%,7%_76%,14%_61%,0%_50%,14%_39%,7%_24%,23%_24%,26%_8%,41%_13%)]",
       },
     },
     defaultVariants: {

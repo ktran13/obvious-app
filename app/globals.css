@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -178,4 +179,71 @@
   );
   background-size: 10px 10px;
 }
+/* ═══ Paper-craft motion (deliverable 6) ═══
+   Timing tokens: 200–350ms, gentle ease-out. Tailwind 4 has no duration
+   theme namespace, so durations are exposed as static utilities below and
+   the easing curve through the --ease-* namespace. No spring/squash
+   physics — that was the dropped Candy Playground graft. */
 
+:root {
+  --motion-fast: 200ms;
+  --motion-base: 250ms;
+  --motion-slow: 350ms;
+  --motion-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@theme inline {
+  --ease-paper: var(--motion-ease);
+}
+
+@utility duration-motion-fast {
+  transition-duration: var(--motion-fast);
+}
+
+@utility duration-motion-base {
+  transition-duration: var(--motion-base);
+}
+
+@utility duration-motion-slow {
+  transition-duration: var(--motion-slow);
+}
+
+/* Sticker wiggle: one gentle hand-drawn oscillation on hover. */
+@keyframes riso-wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-3deg);
+  }
+  65% {
+    transform: rotate(2.5deg);
+  }
+  85% {
+    transform: rotate(-1deg);
+  }
+}
+
+@utility riso-wiggle {
+  &:hover {
+    animation: riso-wiggle var(--motion-slow) var(--motion-ease);
+  }
+}
+
+/* Page-flip fade-slide: a group rises 6px out of the paper as it mounts —
+   replays when filters change remount the groups. */
+@keyframes riso-fade-slide {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility riso-fade-slide {
+  animation: riso-fade-slide var(--motion-slow) var(--motion-ease) both;
+}

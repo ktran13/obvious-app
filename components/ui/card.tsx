@@ -4,9 +4,10 @@ import { cn } from "cn";
 
 const cardVariants = cva(
   // Riso zine card: paper cream surface, 8px handmade radius, 1.5px ink
-  // border (single source: --card-border), 1-degree hover tilt. Motion
-  // tokens and reduced-motion collapse formalize in the motion pass.
-  "bg-card text-card-foreground relative rounded-[var(--radius-card)] [border:var(--card-border)] transition-transform duration-200 ease-out hover:rotate-1",
+  // border (single source: --card-border), 1-degree hover tilt on the
+  // paper-craft motion tokens (deliverable 6; collapses to a fade under
+  // prefers-reduced-motion via the globals.css collapse rule).
+  "bg-card text-card-foreground relative rounded-[var(--radius-card)] [border:var(--card-border)] transition-transform duration-motion-fast ease-paper hover:rotate-1",
   {
     variants: {
       // Torn-edge top is decorative — reserved for feature/marketing
