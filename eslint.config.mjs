@@ -16,7 +16,14 @@ const eslintConfig = [
   // Last so it can disable stylistic rules that conflict with Prettier.
   prettier,
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "storybook-static/**",
+      "next-env.d.ts",
+    ],
   },
 ];
 
