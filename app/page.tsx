@@ -37,7 +37,7 @@ function EventList({
           venue: event.venue ?? "",
           neighborhood: event.neighborhood ?? "",
           isFree: event.priceType === "free",
-          priceCents: event.priceType === "paid" ? (event.priceMin ?? undefined) : undefined,
+          priceCents: event.priceType === "paid" ? (event.priceMax ?? event.priceMin ?? undefined) : undefined,
           source: { slug: event.sourceSlug, label: event.sourceLabel },
           url: event.canonicalUrl,
         };
@@ -45,6 +45,8 @@ function EventList({
           <li key={event.id}>
             <EventCard
               event={summary}
+              tracked
+              affiliateUrl={event.affiliateUrl}
               saveButton={
                 <SaveButtonContainer
                   targetType="event"

@@ -31,6 +31,7 @@ export interface DirectoryEvent {
   priceMin: number | null;
   priceMax: number | null;
   canonicalUrl: string;
+  affiliateUrl: string | null;
   sourceSlug: string;
   sourceLabel: string;
 }
@@ -70,6 +71,7 @@ const directoryEventColumns = {
   priceMin: events.priceMin,
   priceMax: events.priceMax,
   canonicalUrl: events.canonicalUrl,
+  affiliateUrl: events.affiliateUrl,
   sourceSlug: sources.slug,
   sourceLabel: sources.slug,
 };
