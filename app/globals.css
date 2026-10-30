@@ -154,3 +154,25 @@
     @apply font-sans;
   }
 }
+
+/* Riso marketing textures (deliverable 4) — decorative utilities for
+   feature/marketing surfaces only; never inside dense directory cards. */
+
+/* Misregistration: 2px magenta/blue duotone offset, as if two riso drums
+   printed a hair apart. Shadow colors are riso ink tokens. */
+.riso-misregister {
+  text-shadow:
+    2px 0 0 var(--color-ink-magenta),
+    -2px 0 0 var(--color-ink-blue);
+}
+
+/* Halftone-dot print background behind feature images/flyer surfaces. */
+.riso-halftone {
+  background-image: radial-gradient(
+    circle,
+    rgb(0 120 191 / 0.16) 1.5px,
+    transparent 1.6px
+  );
+  background-size: 10px 10px;
+}
+

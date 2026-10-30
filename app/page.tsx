@@ -5,6 +5,8 @@ import { AdSlot } from "@/components/events/ad-slot";
 import { EventCard } from "@/components/events/event-card";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
 import type { EventSummary } from "@/components/events/types";
+import { RisoGrain } from "@/components/marketing/riso-grain";
+
 import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
@@ -87,16 +89,24 @@ export default async function Home() {
     <div className="min-h-screen">
       <AppHeader />
       <main className="mx-auto max-w-3xl px-4 py-8">
-        <h1 className="text-2xl font-semibold">Upcoming in NYC</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Browse freely — sign in only if you want to save things.
-        </p>
-        <Link
-          href="/events"
-          className="text-primary mt-3 inline-block text-sm font-medium underline-offset-4 hover:underline"
-        >
-          Browse the full events directory →
-        </Link>
+        <div className="relative">
+          {/* Marketing texture: riso grain at --grain-opacity (texture-
+              discipline rule — marketing surfaces only, never directories). */}
+          <RisoGrain />
+          <h1 className="riso-misregister font-display text-3xl font-semibold">
+            Upcoming in NYC
+          </h1>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Browse freely — sign in only if you want to save things.
+          </p>
+          <Link
+            href="/events"
+            className="text-primary mt-3 inline-block text-sm font-medium underline-offset-4 hover:underline"
+          >
+            Browse the full events directory →
+          </Link>
+        </div>
+
 
         <section className="mt-8" aria-label="Tonight">
           <h2 className="text-lg font-semibold tracking-tight">Tonight</h2>

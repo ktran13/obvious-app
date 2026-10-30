@@ -10,7 +10,8 @@ export async function AppHeader() {
   return (
     <header className="border-border border-b">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-        <Link href="/" className="text-base font-semibold">
+        {/* Logo misregistration: magenta/blue duotone offset (deliverable 4). */}
+        <Link href="/" className="riso-misregister font-display text-base font-semibold">
           NYC Discovery
         </Link>
         <nav className="flex items-center gap-4 text-sm">
