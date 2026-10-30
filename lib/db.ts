@@ -19,3 +19,15 @@ function getClient(): postgres.Sql {
 export function getDb(): PostgresJsDatabase<Record<string, never>> {
   return drizzle(getClient());
 }
+
+/**
+ * Close the cached client and forget it — the next getDb() opens a fresh
+ * connection. Safe to call multiple times (no-op when nothing is open).
+ * Scripts and test teardown use this; app code never should.
+ */
+export async function closeDb(): Promise<void> {
+  if (client) {
+    await client.end({ timeout: 1 });
+    client = undefined;
+  }
+}

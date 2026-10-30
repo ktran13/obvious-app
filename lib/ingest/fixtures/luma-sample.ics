@@ -1,0 +1,54 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luma//Luma Calendar//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:evt_9Xk2mPq4RtS7vBnA@lu.ma
+DTSTAMP:20261030T120000Z
+SUMMARY:Brooklyn Tech Guild — November Showcase
+DTSTART;TZID=America/New_York:20261112T183000
+DTEND;TZID=America/New_York:20261112T203000
+DESCRIPTION:Demos from five member teams\, followed by open\, structured n
+ etworking. Light refreshments provided.
+URL:https://lu.ma/9Xk2mPq4RtS7vBnA
+LOCATION:Industry City\, 68 34th St\, Brooklyn
+END:VEVENT
+BEGIN:VEVENT
+UID:evt_3nQ7wYbZcLd8hTgf@lu.ma
+DTSTAMP:20261030T120000Z
+SUMMARY:Summer Rooftop Listening Session
+DTSTART;TZID=America/New_York:20260715T190000
+DTEND;TZID=America/New_York:20260715T210000
+DESCRIPTION:An evening of live sets from local vinyl selectors.
+URL:https://lu.ma/3nQ7wYbZcLd8hTgf
+LOCATION:A rooftop in Bushwick (address shared after RSVP)
+END:VEVENT
+BEGIN:VEVENT
+UID:evt_K2pV9sXwQmR4tYhb@lu.ma
+DTSTAMP:20261030T120000Z
+SUMMARY:Civic Tech Working Group (UTC-form export)
+DTSTART:20261201T223000Z
+DTEND:20261202T003000Z
+DESCRIPTION:Monthly working session on open data tooling for NYC.
+URL:https://lu.ma/K2pV9sXwQmR4tYhb
+END:VEVENT
+BEGIN:VEVENT
+UID:evt_5dR8nJcWxHk3pLmq@lu.ma
+DTSTAMP:20261030T120000Z
+SUMMARY:Governors Island Harvest Day
+DTSTART;VALUE=DATE:20261121
+DTEND;VALUE=DATE:20261122
+DESCRIPTION:All-day outdoor fair on the island\; free ferries before noon
+ .
+URL:https://lu.ma/5dR8nJcWxHk3pLmq
+LOCATION:Governors Island\, OMNY Gates
+END:VEVENT
+BEGIN:VEVENT
+UID:evt_Pq6tWzYxKbN2rVjD@lu.ma
+DTSTAMP:20261030T120000Z
+SUMMARY:Quoted-Param Stress Test
+DTSTART;TZID=America/New_York:20261119T183000
+DTEND;TZID=America/New_York:20261119T193000
+DESCRIPTION:ORGANIZER;CN="Meetup: Queens Edition" is embedded in text.
+END:VEVENT
+END:VCALENDAR
