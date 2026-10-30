@@ -7,9 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-display: var(--font-fraunces);
+  --font-hand: var(--font-caveat);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,75 +47,100 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* Downtown Riso Zine inks (art_iT6CEiWA §B) — literal values so utilities
+     like bg-ink-magenta resolve without a runtime var indirection. */
+  --color-ink-magenta: #FF48B0;
+  --color-ink-blue: #0078BF;
+  --color-ink-yellow: #FFE800;
+  --color-ink-orange: #EE7623;
+  --color-ink-green: #00933C;
+  --color-ink-red: #EE352E;
+  --color-paper: #F7F2E7;
+  --color-ink-black: #141414;
+  /* One riso ink per category: events→magenta, communities→blue,
+     jobs→green, civic→orange. */
+  --color-ink-events: #FF48B0;
+  --color-ink-communities: #0078BF;
+  --color-ink-jobs: #00933C;
+  --color-ink-civic: #EE7623;
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --grain-opacity: 0.06;
+  --radius-card: 8px;
+  --card-border: 1.5px solid var(--color-ink-black);
+  --background: #F7F2E7;
+  --foreground: #141414;
+  --card: #F7F2E7;
+  --card-foreground: #141414;
+  --popover: #F7F2E7;
+  --popover-foreground: #141414;
+  --primary: #FF48B0;
+  --primary-foreground: #141414;
+  --secondary: #EFE7D6;
+  --secondary-foreground: #141414;
+  --muted: #EFE7D6;
+  --muted-foreground: #5B5546;
+  --accent: #EFE7D6;
+  --accent-foreground: #141414;
+  --destructive: #EE352E;
+  --destructive-foreground: #F7F2E7;
+  --border: #D9D0BD;
+  --input: #D9D0BD;
+  --ring: #0078BF;
+  --chart-1: #FF48B0;
+  --chart-2: #0078BF;
+  --chart-3: #00933C;
+  --chart-4: #EE7623;
+  --chart-5: #EE352E;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #F1EBDD;
+  --sidebar-foreground: #141414;
+  --sidebar-primary: #FF48B0;
+  --sidebar-primary-foreground: #141414;
+  --sidebar-accent: #EFE7D6;
+  --sidebar-accent-foreground: #141414;
+  --sidebar-border: #D9D0BD;
+  --sidebar-ring: #0078BF;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* "Photocopy night" — inverted paper: near-black photocopier base,
+     paper-cream text, glow-ink accents. High-contrast and simple; texture
+     stays out of dark mode by design. */
+  --grain-opacity: 0.04;
+  --background: #141414;
+  --foreground: #F7F2E7;
+  --card: #1D1B18;
+  --card-foreground: #F7F2E7;
+  --popover: #1D1B18;
+  --popover-foreground: #F7F2E7;
+  --primary: #FF48B0;
+  --primary-foreground: #141414;
+  --secondary: #2A2723;
+  --secondary-foreground: #F7F2E7;
+  --muted: #2A2723;
+  --muted-foreground: #B8AF9D;
+  --accent: #2A2723;
+  --accent-foreground: #F7F2E7;
+  --destructive: #EE352E;
+  --destructive-foreground: #F7F2E7;
+  --border: rgb(247 242 231 / 15%);
+  --input: rgb(247 242 231 / 20%);
+  --ring: #33A6DD;
+  --chart-1: #FF48B0;
+  --chart-2: #33A6DD;
+  --chart-3: #00933C;
+  --chart-4: #EE7623;
+  --chart-5: #EE352E;
+  --sidebar: #1D1B18;
+  --sidebar-foreground: #F7F2E7;
+  --sidebar-primary: #FF48B0;
+  --sidebar-primary-foreground: #141414;
+  --sidebar-accent: #2A2723;
+  --sidebar-accent-foreground: #F7F2E7;
+  --sidebar-border: rgb(247 242 231 / 15%);
+  --sidebar-ring: #33A6DD;
 }
 
 @layer base {
