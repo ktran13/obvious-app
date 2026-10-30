@@ -25,9 +25,7 @@ describe("dayKey", () => {
 
 describe("formatDayHeading", () => {
   it("formats the NYC weekday and date", () => {
-    expect(formatDayHeading("2026-11-07T14:00:00.000Z")).toBe(
-      "Saturday, Nov 7",
-    );
+    expect(formatDayHeading("2026-11-07T14:00:00.000Z")).toBe("Saturday, Nov 7");
   });
 
   it("formats the late-evening instants that belong to the prior NYC day", () => {
@@ -41,9 +39,7 @@ describe("formatEventTime", () => {
   });
 
   it("formats in a supplied timezone", () => {
-    expect(formatEventTime("2026-11-07T14:00:00.000Z", "America/Chicago")).toBe(
-      "8:00 AM",
-    );
+    expect(formatEventTime("2026-11-07T14:00:00.000Z", "America/Chicago")).toBe("8:00 AM");
   });
 
   it("formats single-digit minutes without a leading zero", () => {

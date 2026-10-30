@@ -41,15 +41,15 @@ export function EventCard({
   return (
     <article
       data-slot="event-card"
-      className={cn("rounded-xl border border-border bg-card p-4", className)}
+      className={cn("border-border bg-card rounded-xl border p-4", className)}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs font-medium text-muted-foreground">
+          <p className="text-muted-foreground text-xs font-medium">
             {formatEventTime(event.startsAt, timeZone)}
           </p>
           <h3 className="mt-0.5 text-base font-semibold">{event.title}</h3>
-          <p className="mt-0.5 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-0.5 text-sm">
             <span>{event.venue}</span> · <span>{event.neighborhood}</span>
           </p>
         </div>
@@ -64,7 +64,7 @@ export function EventCard({
           href={tracked && event.id ? `/go/${event.id}` : event.url}
           target="_blank"
           rel={linkOutRel(affiliateUrl)}
-          className="ml-auto text-sm font-medium text-primary underline-offset-4 hover:underline"
+          className="text-primary ml-auto text-sm font-medium underline-offset-4 hover:underline"
         >
           View at {event.source.label} <span aria-hidden>↗</span>
         </a>

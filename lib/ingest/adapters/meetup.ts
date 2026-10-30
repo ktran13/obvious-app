@@ -97,9 +97,16 @@ export class MeetupAdapter implements SourceAdapter<MeetupEventNode> {
   }
 
   async fetchRaw(): Promise<MeetupEventNode[]> {
-    const groups = this.options.groups ?? (process.env["MEETUP_GROUPS"] ?? "").split(",").map((g) => g.trim()).filter(Boolean);
+    const groups =
+      this.options.groups ??
+      (process.env["MEETUP_GROUPS"] ?? "")
+        .split(",")
+        .map((g) => g.trim())
+        .filter(Boolean);
     if (groups.length === 0) {
-      throw new Error("Meetup adapter needs groups option or MEETUP_GROUPS env (comma-separated urlnames)");
+      throw new Error(
+        "Meetup adapter needs groups option or MEETUP_GROUPS env (comma-separated urlnames)",
+      );
     }
     const endpoint = this.options.endpoint ?? "https://api.meetup.com/gql2";
     const doFetch = this.options.fetchImpl ?? fetch;
@@ -119,7 +126,9 @@ export class MeetupAdapter implements SourceAdapter<MeetupEventNode> {
         }),
       });
       if (!response.ok) {
-        throw new Error(`Meetup GraphQL request failed: HTTP ${response.status} for group ${urlname}`);
+        throw new Error(
+          `Meetup GraphQL request failed: HTTP ${response.status} for group ${urlname}`,
+        );
       }
       const payload = (await response.json()) as MeetupGroupPayload;
       const edges = payload.data?.events?.edges ?? [];

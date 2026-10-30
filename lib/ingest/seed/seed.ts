@@ -35,15 +35,21 @@ function chunk<T>(items: T[], size = CHUNK_SIZE): T[][] {
   return out;
 }
 
-export async function runSeed(db: PostgresJsDatabase, now: Date = new Date()): Promise<SeedSummary> {
+export async function runSeed(
+  db: PostgresJsDatabase,
+  now: Date = new Date(),
+): Promise<SeedSummary> {
   // Register every adapter's source row so later syncs map slugs to ids.
   // `enabled` is operator state — the upsert does not clobber it.
-  await db.insert(sources).values([
-    { slug: "curated", kind: "manual", enabled: true },
-    { slug: "luma-nyc", kind: "ical", enabled: true },
-    { slug: "freenyc", kind: "manual", enabled: true },
-    { slug: "meetup", kind: "api", enabled: false },
-  ]).onConflictDoNothing();
+  await db
+    .insert(sources)
+    .values([
+      { slug: "curated", kind: "manual", enabled: true },
+      { slug: "luma-nyc", kind: "ical", enabled: true },
+      { slug: "freenyc", kind: "manual", enabled: true },
+      { slug: "meetup", kind: "api", enabled: false },
+    ])
+    .onConflictDoNothing();
 
   const [curated] = await db.select().from(sources).where(eq(sources.slug, CURATED_SOURCE_SLUG));
   if (!curated) throw new Error("curated source row missing after upsert");
@@ -86,7 +92,11 @@ export async function runSeed(db: PostgresJsDatabase, now: Date = new Date()): P
     );
   }
   const fresh = accepted.filter(
-    (e) => !isEventStale({ startsAt: e.startsAt, endsAt: e.endsAt ?? null, expiresAt: e.expiresAt ?? null }, now),
+    (e) =>
+      !isEventStale(
+        { startsAt: e.startsAt, endsAt: e.endsAt ?? null, expiresAt: e.expiresAt ?? null },
+        now,
+      ),
   );
   await upsertEvents(db, CURATED_SOURCE_SLUG, "manual", fresh);
 

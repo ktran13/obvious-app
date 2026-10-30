@@ -1,19 +1,31 @@
 /**
- * Seed pipeline tests against a real (locally migrated) Postgres:
- * two consecutive runs leave an identical event count with zero duplicate
- * (source_id, external_id) pairs, and the seeded calendar covers every
- * interest category, persona tag, and neighborhood with future dates.
+ * Seed pipeline tests against an isolated, throwaway Postgres database
+ * (see lib/db/test-db): two consecutive runs leave an identical event count
+ * with zero duplicate (source_id, external_id) pairs, and the seeded
+ * calendar covers every interest category, persona tag, and neighborhood
+ * with future dates.
  */
 import { sql } from "drizzle-orm";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { closeDb, getDb } from "../../db";
+import { createIsolatedTestDb } from "../../db/test-db";
 import { communities, eventTags, events, jobPostings } from "../../db/schema";
 import { runSeed } from "./seed";
 import { COMMUNITIES, JOB_POSTINGS } from "./fixtures";
 import { INTEREST_TAGS, NEIGHBORHOODS, PERSONA_TAGS, type Neighborhood } from "./taxonomy";
 
-const db = getDb();
+let db: ReturnType<typeof getDb>;
+let disposeTestDb: () => Promise<void>;
+
+beforeAll(async () => {
+  // Isolated database + env override before the first getDb() call, so the
+  // cached singleton connects to the throwaway DB, not shared dev data.
+  const testDb = await createIsolatedTestDb("nyc_seed_test");
+  process.env.DATABASE_URL = testDb.url;
+  db = getDb();
+  disposeTestDb = testDb.dispose;
+}, 30_000);
 
 /** Fixed clock — expansion is deterministic, so ids and counts are stable. */
 const NOW = new Date("2026-10-30T15:00:00Z");
@@ -22,10 +34,13 @@ afterAll(async () => {
   // Closes the cached client and resets the singleton, so a later test file
   // that needs the database opens a fresh connection.
   await closeDb();
+  await disposeTestDb();
 });
 
 beforeEach(async () => {
-  await db.execute(sql`TRUNCATE TABLE event_tags, events, communities, job_postings, sources CASCADE`);
+  await db.execute(
+    sql`TRUNCATE TABLE event_tags, events, communities, job_postings, sources CASCADE`,
+  );
 });
 
 describe("runSeed", () => {

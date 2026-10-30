@@ -85,7 +85,11 @@ describe("MeetupAdapter — enabled with injected transport", () => {
   });
 
   it("requires a group list", async () => {
-    const adapter = new MeetupAdapter({ groups: [], fetchImpl: vi.fn(), isEnabledImpl: () => true });
+    const adapter = new MeetupAdapter({
+      groups: [],
+      fetchImpl: vi.fn(),
+      isEnabledImpl: () => true,
+    });
     await expect(adapter.fetchRaw()).rejects.toThrow(/groups/);
   });
 });

@@ -24,11 +24,7 @@ export const Saturday: Story = {
   render: (args) => (
     <DayGroup {...args}>
       {saturday.map((event) => (
-        <EventCard
-          key={event.id}
-          event={event}
-          saveButton={<SaveButton state="idle" />}
-        />
+        <EventCard key={event.id} event={event} saveButton={<SaveButton state="idle" />} />
       ))}
     </DayGroup>
   ),

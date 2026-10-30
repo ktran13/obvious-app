@@ -37,17 +37,17 @@ pnpm dev              # http://localhost:3000
 
 ### Scripts
 
-| Script              | What it does                          |
-| ------------------- | ------------------------------------- |
-| `pnpm dev`          | Start the dev server (Turbopack)      |
-| `pnpm build`        | Production build                      |
-| `pnpm lint`         | ESLint (flat config, Next + Prettier) |
-| `pnpm typecheck`    | `tsc --noEmit` (strict)               |
-| `pnpm test`         | Vitest unit tests                     |
+| Script              | What it does                                         |
+| ------------------- | ---------------------------------------------------- |
+| `pnpm dev`          | Start the dev server (Turbopack)                     |
+| `pnpm build`        | Production build                                     |
+| `pnpm lint`         | ESLint (flat config, Next + Prettier)                |
+| `pnpm typecheck`    | `tsc --noEmit` (strict)                              |
+| `pnpm test`         | Vitest unit tests                                    |
 | `pnpm db:seed`      | Idempotent demo seed (source, events, one community) |
-| `pnpm e2e`          | Playwright e2e (starts its own dev server on :3100) |
-| `pnpm format`       | Prettier — write                      |
-| `pnpm format:check` | Prettier — check                      |
+| `pnpm e2e`          | Playwright e2e (starts its own dev server on :3100)  |
+| `pnpm format`       | Prettier — write                                     |
+| `pnpm format:check` | Prettier — check                                     |
 
 ### Database
 

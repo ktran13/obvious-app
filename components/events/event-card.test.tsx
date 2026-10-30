@@ -12,9 +12,7 @@ describe("EventCard", () => {
   it("renders title, NYC time, venue, neighborhood, price, and source badge", () => {
     render(<EventCard event={paid} />);
 
-    expect(
-      screen.getByRole("heading", { name: paid.title }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: paid.title })).toBeInTheDocument();
     // Jazz fixture: 2026-11-07T02:30Z = 9:30 PM Nov 6 in New York.
     expect(screen.getByText("9:30 PM")).toBeInTheDocument();
     expect(screen.getByText(paid.venue)).toBeInTheDocument();
@@ -71,9 +69,7 @@ describe("EventCard", () => {
 
   it("renders a save button passed through the slot", () => {
     render(<EventCard event={free} saveButton={<button>Save</button>} />);
-    expect(
-      screen.getByRole("button", { name: "Save" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 
   it("renders no save area when the slot is absent", () => {

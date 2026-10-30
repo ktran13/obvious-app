@@ -8,7 +8,7 @@ export function SignOutButton() {
       type="button"
       data-slot="sign-out"
       onClick={() => signOut()}
-      className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-background px-4 text-sm font-medium hover:bg-muted"
+      className="border-border bg-background hover:bg-muted inline-flex h-9 items-center justify-center rounded-lg border px-4 text-sm font-medium"
     >
       Sign out
     </button>

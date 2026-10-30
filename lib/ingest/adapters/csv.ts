@@ -143,7 +143,10 @@ export function parseCsvRows(text: string): ParsedCsv {
   return { header: headerLower, rows };
 }
 
-function optionalNumber(fields: Partial<Record<CsvColumn, string>>, col: CsvColumn): number | undefined {
+function optionalNumber(
+  fields: Partial<Record<CsvColumn, string>>,
+  col: CsvColumn,
+): number | undefined {
   const raw = fields[col];
   if (!raw) return undefined;
   const parsed = Number(raw);

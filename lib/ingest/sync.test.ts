@@ -1,27 +1,41 @@
 /**
- * Upsert pipeline tests against a real (locally migrated) Postgres:
- * re-running upserts updates in place, never duplicates (source_id,
- * external_id); tags are replaced wholesale; stale-window semantics match
- * the schema's expires_at / ended-event rules.
+ * Upsert pipeline tests against an isolated, throwaway Postgres database
+ * (see lib/db/test-db): re-running upserts updates in place, never
+ * duplicates (source_id, external_id); tags are replaced wholesale;
+ * stale-window semantics match the schema's expires_at / ended-event rules.
  */
 import { sql } from "drizzle-orm";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { closeDb, getDb } from "../db";
+import { createIsolatedTestDb } from "../db/test-db";
 import { eventTags, events } from "../db/schema";
 import { parsedEventSchema } from "../schemas/parsed-event";
 import { isEventStale, upsertEvents } from "./sync";
 
-const db = getDb();
+let db: ReturnType<typeof getDb>;
+let disposeTestDb: () => Promise<void>;
+
+beforeAll(async () => {
+  // Isolated database + env override before the first getDb() call, so the
+  // cached singleton connects to the throwaway DB, not shared dev data.
+  const testDb = await createIsolatedTestDb("nyc_sync_test");
+  process.env.DATABASE_URL = testDb.url;
+  db = getDb();
+  disposeTestDb = testDb.dispose;
+}, 30_000);
 
 afterAll(async () => {
   // Closes the cached client and resets the singleton, so a later test file
   // that needs the database opens a fresh connection.
   await closeDb();
+  await disposeTestDb();
 });
 
 beforeEach(async () => {
-  await db.execute(sql`TRUNCATE TABLE event_tags, events, communities, job_postings, sources CASCADE`);
+  await db.execute(
+    sql`TRUNCATE TABLE event_tags, events, communities, job_postings, sources CASCADE`,
+  );
 });
 
 /** Build a schema-valid ParsedEvent from overrides. */
@@ -153,7 +167,9 @@ describe("upsertEvents", () => {
     await upsertEvents(db, "curated", "manual", [
       makeParsedEvent({ tags: ["interest:community", "persona:newcomers"] }),
     ]);
-    await upsertEvents(db, "curated", "manual", [makeParsedEvent({ tags: ["interest:community"] })]);
+    await upsertEvents(db, "curated", "manual", [
+      makeParsedEvent({ tags: ["interest:community"] }),
+    ]);
     const tags = (await db.select().from(eventTags)).map((t) => t.tag).sort();
     expect(tags).toEqual(["interest:community"]);
   });

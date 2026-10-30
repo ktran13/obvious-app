@@ -4,12 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import {
-  saveCommunity,
-  saveEvent,
-  unsaveCommunity,
-  unsaveEvent,
-} from "@/lib/saves/queries";
+import { saveCommunity, saveEvent, unsaveCommunity, unsaveEvent } from "@/lib/saves/queries";
 
 /**
  * Server actions behind the save buttons. The user id always comes from the

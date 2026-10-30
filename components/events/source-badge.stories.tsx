@@ -22,7 +22,6 @@ export const Meetup: Story = {
 
 export const Curated: Story = {
   args: {
-    source:
-      fixtureEvents.find((event) => event.source.slug === "curated")!.source,
+    source: fixtureEvents.find((event) => event.source.slug === "curated")!.source,
   },
 };

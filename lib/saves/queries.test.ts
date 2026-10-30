@@ -1,13 +1,17 @@
 /**
- * Save/list/unsave query tests — run against a real Postgres (compose service,
- * or CI's postgres:16 service). Requires migrations applied first:
- * `pnpm db:migrate`.
+ * Save/list/unsave query tests — isolated in a throwaway Postgres database
+ * (see lib/db/test-db), so they neither see nor destroy the shared dev/CI
+ * seed data (306 curated events).
  */
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
+import {
+  createIsolatedTestDb,
+  type IsolatedTestDb,
+} from "@/lib/db/test-db";
 import { communities, events, savedItems, sources, users } from "@/lib/db/schema";
 import { resolveDatabaseUrl } from "@/lib/db/url";
 import {
@@ -21,11 +25,25 @@ import {
   unsaveEvent,
 } from "./queries";
 
-const client = postgres(resolveDatabaseUrl(), { max: 1, connect_timeout: 5 });
+const TEST_DB = "nyc_saves_test";
+
+/** Same host/credentials as DATABASE_URL, pointed at the throwaway test DB. */
+const client = postgres(resolveDatabaseUrl(), {
+  database: TEST_DB,
+  max: 1,
+  connect_timeout: 5,
+});
 const db = drizzle(client);
+
+let testDb: IsolatedTestDb;
+
+beforeAll(async () => {
+  testDb = await createIsolatedTestDb(TEST_DB);
+}, 30_000);
 
 afterAll(async () => {
   await client.end();
+  await testDb.dispose();
 });
 
 beforeEach(async () => {
@@ -147,16 +165,18 @@ describe("exactly-one-target CHECK", () => {
     const community = await seedCommunity();
 
     await expect(
-      db.insert(savedItems).values({ userId: user.id, eventId: event.id, communityId: community.id }),
+      db
+        .insert(savedItems)
+        .values({ userId: user.id, eventId: event.id, communityId: community.id }),
     ).rejects.toMatchObject({ cause: { code: "23514" } }); // check_violation
   });
 
   it("rejects a save with no target at all", async () => {
     const user = await seedUser();
 
-    await expect(
-      db.insert(savedItems).values({ userId: user.id }),
-    ).rejects.toMatchObject({ cause: { code: "23514" } });
+    await expect(db.insert(savedItems).values({ userId: user.id })).rejects.toMatchObject({
+      cause: { code: "23514" },
+    });
   });
 });
 

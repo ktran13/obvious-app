@@ -16,19 +16,13 @@ describe("DayGroup", () => {
       </DayGroup>,
     );
 
-    expect(
-      screen.getByRole("heading", { name: "Saturday, Nov 7" }),
-    ).toBeInTheDocument();
-    expect(
-      container.querySelectorAll("[data-slot='event-card']"),
-    ).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: "Saturday, Nov 7" })).toBeInTheDocument();
+    expect(container.querySelectorAll("[data-slot='event-card']")).toHaveLength(2);
   });
 
   it("renders an empty group without cards", () => {
     render(<DayGroup heading="Sunday, Nov 8" />);
-    expect(
-      screen.getByRole("heading", { name: "Sunday, Nov 8" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Sunday, Nov 8" })).toBeInTheDocument();
     expect(screen.queryByTestId("card")).not.toBeInTheDocument();
   });
 });

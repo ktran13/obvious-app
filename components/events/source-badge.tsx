@@ -13,7 +13,7 @@ export function SourceBadge({ source, className }: SourceBadgeProps) {
     <span
       data-slot="source-badge"
       className={cn(
-        "inline-flex items-center rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground",
+        "border-border bg-muted text-muted-foreground inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
         className,
       )}
     >

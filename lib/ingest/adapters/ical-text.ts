@@ -105,7 +105,14 @@ export function parseICalDateTime(
   if (dateMatch) {
     return {
       date: zonedTimeToUtc(
-        { year: +dateMatch[1], month: +dateMatch[2], day: +dateMatch[3], hour: 0, minute: 0, second: 0 },
+        {
+          year: +dateMatch[1],
+          month: +dateMatch[2],
+          day: +dateMatch[3],
+          hour: 0,
+          minute: 0,
+          second: 0,
+        },
         params["TZID"] ?? fallbackTimeZone,
       ),
       isAllDay: true,

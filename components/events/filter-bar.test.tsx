@@ -17,25 +17,13 @@ const selected: EventFilters = {
 
 describe("FilterBar", () => {
   it("renders the selected filters from props", () => {
-    render(
-      <FilterBar filters={selected} options={fixtureFilterOptions} />,
-    );
+    render(<FilterBar filters={selected} options={fixtureFilterOptions} />);
 
-    expect(
-      (screen.getByLabelText("Interest") as HTMLSelectElement).value,
-    ).toBe("Tech");
-    expect(
-      (screen.getByLabelText("Persona") as HTMLSelectElement).value,
-    ).toBe("Newcomer");
-    expect(
-      (screen.getByLabelText("When") as HTMLSelectElement).value,
-    ).toBe("weekend");
-    expect(
-      (screen.getByLabelText("Day") as HTMLSelectElement).value,
-    ).toBe("Saturday");
-    expect(
-      (screen.getByLabelText("Neighborhood") as HTMLSelectElement).value,
-    ).toBe("Bushwick");
+    expect((screen.getByLabelText("Interest") as HTMLSelectElement).value).toBe("Tech");
+    expect((screen.getByLabelText("Persona") as HTMLSelectElement).value).toBe("Newcomer");
+    expect((screen.getByLabelText("When") as HTMLSelectElement).value).toBe("weekend");
+    expect((screen.getByLabelText("Day") as HTMLSelectElement).value).toBe("Saturday");
+    expect((screen.getByLabelText("Neighborhood") as HTMLSelectElement).value).toBe("Bushwick");
     expect(screen.getByLabelText("Free only")).toBeChecked();
   });
 
@@ -50,21 +38,13 @@ describe("FilterBar", () => {
     };
     render(<FilterBar filters={empty} options={fixtureFilterOptions} />);
 
-    expect(
-      (screen.getByLabelText("Interest") as HTMLSelectElement).value,
-    ).toBe("");
+    expect((screen.getByLabelText("Interest") as HTMLSelectElement).value).toBe("");
     expect(screen.getByLabelText("Free only")).not.toBeChecked();
   });
 
   it("reports interest changes upward via onChange", () => {
     const onChange = vi.fn();
-    render(
-      <FilterBar
-        filters={selected}
-        options={fixtureFilterOptions}
-        onChange={onChange}
-      />,
-    );
+    render(<FilterBar filters={selected} options={fixtureFilterOptions} onChange={onChange} />);
 
     fireEvent.change(screen.getByLabelText("Interest"), {
       target: { value: "Music" },

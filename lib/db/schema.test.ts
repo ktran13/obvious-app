@@ -1,13 +1,14 @@
 /**
- * Round-trip schema tests — run against a real Postgres (compose service,
- * or CI's postgres:16 service). Requires migrations applied first:
- * `pnpm db:migrate`.
+ * Round-trip schema tests — isolated in a throwaway Postgres database (see
+ * lib/db/test-db), so they neither see nor destroy the shared dev/CI seed
+ * data (306 curated events).
  */
 import { asc, eq, gt, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
+import { createIsolatedTestDb, type IsolatedTestDb } from "@/lib/db/test-db";
 import {
   communities,
   eventTags,
@@ -21,11 +22,25 @@ import {
 import { resolveDatabaseUrl } from "./url";
 import { parseStoredEventFilters } from "../schemas/event-filters";
 
-const client = postgres(resolveDatabaseUrl(), { max: 1, connect_timeout: 5 });
+const TEST_DB = "nyc_schema_test";
+
+/** Same host/credentials as DATABASE_URL, pointed at the throwaway test DB. */
+const client = postgres(resolveDatabaseUrl(), {
+  database: TEST_DB,
+  max: 1,
+  connect_timeout: 5,
+});
 const db = drizzle(client);
+
+let testDb: IsolatedTestDb;
+
+beforeAll(async () => {
+  testDb = await createIsolatedTestDb(TEST_DB);
+}, 30_000);
 
 afterAll(async () => {
   await client.end();
+  await testDb.dispose();
 });
 
 beforeEach(async () => {
