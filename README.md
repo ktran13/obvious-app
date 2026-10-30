@@ -44,6 +44,8 @@ pnpm dev              # http://localhost:3000
 | `pnpm lint`         | ESLint (flat config, Next + Prettier) |
 | `pnpm typecheck`    | `tsc --noEmit` (strict)               |
 | `pnpm test`         | Vitest unit tests                     |
+| `pnpm db:seed`      | Idempotent demo seed (source, events, one community) |
+| `pnpm e2e`          | Playwright e2e (starts its own dev server on :3100) |
 | `pnpm format`       | Prettier — write                      |
 | `pnpm format:check` | Prettier — check                      |
 
@@ -56,8 +58,34 @@ points to (`nyc_app` / `nyc_app`, db `nyc_app`, port `5432`).
 { "status": "ok", "db": true }` when it does, `503 { "status": "error", "db":
 false }` when it does not.
 
-> **Note:** `db:migrate` and `db:seed` scripts land in follow-up tasks, along
-> with the Drizzle schema and migrations.
+## Authentication
+
+Auth.js (next-auth v5) with the Drizzle adapter over the existing
+`users` / `accounts` / `sessions` tables; sessions are JWTs. Browsing is
+anonymous-first: nothing requires an account, and the only redirect to sign-in
+is on `/profile` and inside the save button's prompt state.
+
+Two provider modes, selected by environment:
+
+- **Real Google OAuth** — set `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`.
+  This is the production path; no OAuth secrets exist in dev.
+- **Dev-only mock Google provider** — set `AUTH_DEV_MOCK=true` outside
+  production. Signs in a single deterministic user (`dev-user-001` / "Dev
+  User") with no external calls, so the save flow works end-to-end locally
+  without OAuth credentials. Both gates (the env flag AND non-production) are
+  load-bearing — never set `AUTH_DEV_MOCK` in a deployed environment.
+
+## E2E (Playwright)
+
+```sh
+pnpm db:migrate && pnpm db:seed
+pnpm e2e   # boots a dev server on :3100 with AUTH_DEV_MOCK=true
+```
+
+`e2e/auth-save.spec.ts` covers the full save flow: anonymous save click →
+sign-in prompt → mock sign-in → save succeeds → item visible on `/profile` →
+unsave removes it. It also asserts that signed-out `/profile` redirects to
+sign-in while `/` stays auth-free.
 
 ## CI
 

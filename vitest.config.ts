@@ -32,5 +32,9 @@ export default defineConfig({
         },
       },
     ],
+    // DB-backed test files (schema, saves) TRUNCATE shared tables in the one
+    // compose/CI Postgres; running them in parallel truncates each other's
+    // fixtures mid-test. Serializing files keeps that shared state safe.
+    fileParallelism: false,
   },
 });
