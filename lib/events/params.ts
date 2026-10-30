@@ -6,7 +6,12 @@
  * (neighborhood). Parsing is fail-open — a malformed or unknown value is
  * ignored, never a 400, so browsing never breaks on a hand-typed URL.
  */
-import { dayFilterSchema, eventFilterSchema, whenFilterSchema } from "@/lib/schemas/event-filters";
+import {
+  dayFilterSchema,
+  eventFilterSchema,
+  whenFilterSchema,
+  type EventFilter,
+} from "@/lib/schemas/event-filters";
 
 import type { EventFilters } from "@/components/events/types";
 
@@ -84,6 +89,34 @@ export function toEventFilter(filters: EventFilters) {
     when: filters.when ?? undefined,
     free: filters.freeOnly || undefined,
   });
+}
+
+/** Query keys that make a /events URL an explicit filter deep link. */
+const FILTER_PARAM_KEYS = ["interest", "persona", "when", "day", "free", "n"] as const;
+
+/**
+ * True when the URL carries any explicit filter param. Rev 2.3 precedence:
+ * a URL with explicit params is a deep link — it wins over saved preferences
+ * wholesale; saved preferences only pre-apply when the URL names no filters.
+ */
+export function hasExplicitFilterParams(params: RawSearchParams): boolean {
+  return FILTER_PARAM_KEYS.some((key) => params[key] !== undefined);
+}
+
+/**
+ * Saved-preference shape → the FilterBar's UI shape (the storage path inverse
+ * of toEventFilter). Pure mapping, so the directory can render the saved set
+ * through the exact same controls the URL path uses.
+ */
+export function savedFiltersToEventFilters(saved: EventFilter): EventFilters {
+  return {
+    interests: saved.interests,
+    persona: saved.personas[0] ?? null,
+    when: saved.when ?? null,
+    day: saved.day ?? null,
+    freeOnly: saved.free ?? false,
+    neighborhoods: saved.neighborhood ? [saved.neighborhood] : [],
+  };
 }
 
 /** "dog-owners" → "Dog owners" — display labels for taxonomy slugs. */
