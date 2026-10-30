@@ -1,0 +1,6 @@
+external_id,title,canonical_url,description,starts_at,ends_at,venue,neighborhood,borough,price_type,price_min_cents,price_max_cents,affiliate_url,expires_at,tags
+csv-bad-01,Not A URL Row Here,not-a-valid-url,URL is broken,2026-11-18T19:00:00-05:00,,,,,unknown,,,,,
+csv-bad-02,Bad Start Date Row,https://example.org/bad-date,Starts at is not a date,2nd Tuesday of Never,,,,,unknown,,,,,
+csv-bad-03,Unknown Price Type Row,https://example.org/unknown-price,price_type is not in the enum,2026-11-19T19:00:00-05:00,,,,,complimentary,,,,,
+csv-bad-04,,https://example.org/missing-title,Title column is empty,2026-11-20T19:00:00-05:00,,,,,unknown,,,,,
+csv-bad-05,Ends Before Starts Row,https://example.org/time-travel,ends_at is before starts_at,2026-11-21T20:00:00-05:00,2026-11-21T19:00:00-05:00,,,,unknown,,,,,
