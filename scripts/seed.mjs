@@ -31,6 +31,13 @@ function daysFromNow(days, hourNY) {
   return new Date(Date.now() + days * 24 * 60 * 60 * 1000 + (hourNY - 12) * 60 * 60 * 1000);
 }
 
+function hoursFromNow(hours) {
+  // Soon after seeding: the homepage shows the 12 soonest upcoming events and
+  // the ingestion seed contributes hundreds of future-dated fixtures, so the
+  // curated /go fixtures must start within hours to stay featured in CI e2e.
+  return new Date(Date.now() + hours * 60 * 60 * 1000);
+}
+
 const [source] = await sql`
   INSERT INTO sources (slug, kind)
   VALUES ('curated', 'manual')
@@ -45,7 +52,7 @@ const events = [
     externalId: "curated-rooftop-film-night",
     title: "Rooftop Film Night — Williamsburg",
     description: "Outdoor screening of a classic NYC film, blankets provided.",
-    startsAt: daysFromNow(2, 19),
+    startsAt: hoursFromNow(2),
     venue: "William Vale Rooftop",
     neighborhood: "Williamsburg",
     borough: "Brooklyn",
@@ -60,7 +67,7 @@ const events = [
     externalId: "curated-prospect-park-cleanup",
     title: "Prospect Park Volunteer Cleanup",
     description: "Lend a hand with trail upkeep; gloves and bags supplied.",
-    startsAt: daysFromNow(4, 10),
+    startsAt: hoursFromNow(4),
     venue: "Prospect Park Picnic House",
     neighborhood: "Park Slope",
     borough: "Brooklyn",
@@ -75,7 +82,7 @@ const events = [
     externalId: "curated-les-food-crawl",
     title: "Lower East Side Food Crawl",
     description: "Five stops, five tastings, one walking tour of the old neighborhood.",
-    startsAt: daysFromNow(6, 15),
+    startsAt: hoursFromNow(6),
     venue: "Essex Street Market",
     neighborhood: "Lower East Side",
     borough: "Manhattan",
