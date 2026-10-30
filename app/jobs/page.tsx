@@ -1,6 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 import Link from "next/link";
 
+import { AdSlot } from "@/components/events/ad-slot";
 import { getDb } from "@/lib/db";
 import { jobPostings, type JobPosting } from "@/lib/db/schema";
 import { formatPostedDate } from "@/lib/jobs/display";
@@ -133,6 +134,8 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
             No postings for this interest yet — check back soon.
           </p>
         )}
+
+        <AdSlot label="Sponsored" className="mt-10" />
       </main>
     </div>
   );
