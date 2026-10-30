@@ -139,6 +139,57 @@ export const COMMUNITIES: CommunitySeed[] = [
   { slug: "curated-editorial", name: "Curated Editorial Team", description: "The small editorial team maintaining these listings." },
   { slug: "freenyc-volunteers", name: "FreeNYC Volunteers", description: "Volunteers maintaining the free-events CSV drop." },
 ];
+/**
+ * Curated attribution: which seeded community runs each recurring event
+ * series. The community directory and detail pages aggregate a community's
+ * upcoming events through the matching `community:<slug>` tag that expand.ts
+ * writes — the same organizer-tagged mechanism real sources will use.
+ *
+ * A few communities (astoria-games, curated-editorial, freenyc-volunteers)
+ * host no seeded series and render with an empty upcoming list.
+ */
+export const TEMPLATE_COMMUNITIES: Record<string, string> = {
+  "tech-civic-hack-night": "nyc-civic-tech",
+  "tech-frontend-study-group": "brooklyn-frontend-guild",
+  "tech-ai-builders-demo": "brooklyn-frontend-guild",
+  "tech-women-in-engineering": "brooklyn-frontend-guild",
+  "arts-open-studio-drawing": "east-village-artists",
+  "arts-gallery-crawl": "east-village-artists",
+  "arts-zine-workshop": "lic-student-collective",
+  "arts-queens-craft-circle": "riverdale-seniors",
+  "music-rooftop-jazz-set": "williamsburg-vinyl-club",
+  "music-community-choir-rehearsal": "riverdale-seniors",
+  "music-vinyl-listening-club": "williamsburg-vinyl-club",
+  "music-family-singalong": "upper-east-parents",
+  "food-night-market-walk": "flushing-food-walks",
+  "food-soup-making-coop": "flushing-food-walks",
+  "food-bagel-crawl": "nyc-dog-owners-alliance",
+  "food-home-winetasting": "queens-newcomers-network",
+  "outdoors-sunrise-run-club": "sunset-park-runners",
+  "outdoors-bridge-walk": "bronx-outdoors",
+  "outdoors-community-garden-hour": "staten-environmental-coalition",
+  "outdoors-kayak-basics": "bronx-outdoors",
+  "wellness-park-yoga": "chelsea-wellness-coop",
+  "wellness-sit-and-stretch": "chelsea-wellness-coop",
+  "wellness-meditation-sit": "chelsea-wellness-coop",
+  "wellness-newcomer-walk-talk": "queens-newcomers-network",
+  "community-fridge-sort": "south-bronx-tenant-org",
+  "community-neighborhood-cleanup": "staten-environmental-coalition",
+  "community-queer-coffee-morning": "bk-queer-social",
+  "community-tenant-rights-table": "south-bronx-tenant-org",
+  "family-storytime": "upper-east-parents",
+  "family-playground-meetup": "upper-east-parents",
+  "family-stroller-walk": "upper-east-parents",
+  "family-kids-science-lab": "park-slope-family-lab",
+  "learning-esl-conversation-circle": "jackson-heights-esl",
+  "learning-city-history-talk": "harlem-history-circle",
+  "learning-coding-for-beginners": "lic-student-collective",
+  "learning-personal-finance-basics": "brooklyn-heights-finance-circle",
+  "film-rooftop-screening": "soho-doc-club",
+  "film-doc-club": "soho-doc-club",
+  "film-family-matinee": "park-slope-family-lab",
+  "film-queer-cinema-night": "bk-queer-social",
+};
 
 export interface JobSeed {
   title: string;

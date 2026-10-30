@@ -9,7 +9,7 @@
  */
 import { PRODUCT_TIMEZONE, zonedTimeToUtc } from "../time";
 import type { ParsedEventInput } from "../types";
-import { EVENT_TEMPLATES, VENUE_BY_NEIGHBORHOOD } from "./fixtures";
+import { COMMUNITIES, EVENT_TEMPLATES, TEMPLATE_COMMUNITIES, VENUE_BY_NEIGHBORHOOD } from "./fixtures";
 import { NEIGHBORHOODS } from "./taxonomy";
 
 export const CURATED_SOURCE_SLUG = "curated";
@@ -49,6 +49,23 @@ export function nyDateAdd(base: Omit<NyDate, "isoWeekday">, days: number): NyDat
 }
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
+
+const communitySlugs = new Set(COMMUNITIES.map((c) => c.slug));
+
+/**
+ * The `community:<slug>` attribution tag for a template. Curated data is
+ * code-controlled, so a mapping to a community slug that does not exist is
+ * a fixture bug — fail loudly at expansion time rather than seeding a tag
+ * that renders into a dead page.
+ */
+function communityTag(templateSlug: string): string[] {
+  const slug = TEMPLATE_COMMUNITIES[templateSlug];
+  if (slug === undefined) return [];
+  if (!communitySlugs.has(slug)) {
+    throw new Error(`TEMPLATE_COMMUNITIES references unknown community slug "${slug}"`);
+  }
+  return [`community:${slug}`];
+}
 
 /** Expand every template across the seed window; deterministic order. */
 export function expandCuratedEvents(now: Date = new Date()): ParsedEventInput[] {
@@ -94,6 +111,8 @@ export function expandCuratedEvents(now: Date = new Date()): ParsedEventInput[] 
         tags: [
           ...template.interests.map((i) => `interest:${i}`),
           ...template.personas.map((p) => `persona:${p}`),
+          // Organizer attribution — the community directory aggregates on this.
+          ...communityTag(template.slug),
         ],
       });
     }

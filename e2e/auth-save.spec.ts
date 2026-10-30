@@ -3,10 +3,10 @@ import { expect, test } from "@playwright/test";
 /**
  * The binding acceptance flow: anonymous save click → sign-in prompt →
  * mock sign-in → save succeeds → item visible on /profile → unsave removes it.
- * Requires demo data seeded: pnpm db:seed:demo.
+ * Works against any seed: it saves the first homepage card and asserts on
+ * that event's actual title (the curated seed pushes the demo event below
+ * the homepage's 12-event fold).
  */
-
-const EVENT_TITLE = "Indie Web Makers Meetup";
 
 test.describe.configure({ mode: "serial" });
 
@@ -24,22 +24,30 @@ test("anonymous save click prompts sign-in, mock sign-in, save, profile, unsave"
   await expect(page).toHaveURL(/\/signin/);
   await page.locator('[data-slot="dev-sign-in"]').click();
 
-  // Back on home, signed in — the same card now offers a plain Save.
+  // Back on home, signed in — save the first card and remember which event
+  // it was, so the profile assertion follows whatever the seed shows.
   await expect(page).toHaveURL(/localhost:\d+\/$/);
-  const save = page.getByRole("button", { name: "Save", exact: true }).first();
+  const firstCard = page.locator('[data-slot="event-card"]').first();
+  const eventTitle = (await firstCard.locator("h3").textContent())?.trim();
+  expect(eventTitle).toBeTruthy();
+  const save = firstCard.getByRole("button", { name: "Save", exact: true });
   await expect(save).toBeVisible();
   await save.click();
   await expect(page.getByRole("button", { name: "Saved" }).first()).toBeVisible();
 
   // The saved item shows on /profile…
   await page.goto("/profile");
-  const savedRow = page.locator('[data-slot="saved-event"]', { hasText: EVENT_TITLE });
+  const savedRow = page.locator('[data-slot="saved-event"]', {
+    hasText: eventTitle as string,
+  });
   await expect(savedRow).toBeVisible();
   await expect(page.locator('[data-slot="identity"]')).toContainText("Dev User");
 
   // …and unsave removes it.
   await savedRow.getByRole("button", { name: "Saved" }).click();
-  await expect(page.locator('[data-slot="saved-event"]', { hasText: EVENT_TITLE })).toBeHidden();
+  await expect(
+    page.locator('[data-slot="saved-event"]', { hasText: eventTitle as string }),
+  ).toBeHidden();
 });
 
 test("signed-out /profile redirects to sign-in; browse stays auth-free", async ({ page }) => {

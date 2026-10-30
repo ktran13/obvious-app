@@ -7,10 +7,13 @@ import { z } from "zod";
 
 export const priceTypeSchema = z.enum(["free", "paid", "unknown"]);
 
-/** "interest:tech" | "persona:female" | "persona:kids" — matches event_tags.tag. */
+/** "interest:tech" | "persona:female" | "community:run-club" — matches event_tags.tag. */
 export const eventTagSchema = z
   .string()
-  .regex(/^(interest|persona):[a-z0-9_-]+$/, 'Tags are prefixed slugs like "interest:tech"');
+  .regex(
+    /^(interest|persona|community):[a-z0-9_-]+$/,
+    'Tags are prefixed slugs like "interest:tech"',
+  );
 
 export const parsedEventSchema = z
   .object({
