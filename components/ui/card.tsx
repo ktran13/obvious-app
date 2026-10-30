@@ -4,8 +4,9 @@ import { cn } from "cn";
 
 const cardVariants = cva(
   // Riso zine card: paper cream surface, 8px handmade radius, 1.5px ink
-  // border (single source: --card-border). Hover tilt is a motion-pass concern.
-  "bg-card text-card-foreground relative rounded-[var(--radius-card)] [border:var(--card-border)]",
+  // border (single source: --card-border), 1-degree hover tilt. Motion
+  // tokens and reduced-motion collapse formalize in the motion pass.
+  "bg-card text-card-foreground relative rounded-[var(--radius-card)] [border:var(--card-border)] transition-transform duration-200 ease-out hover:rotate-1",
   {
     variants: {
       // Torn-edge top is decorative — reserved for feature/marketing
@@ -22,28 +23,34 @@ const cardVariants = cva(
   },
 );
 
-type CardProps = React.ComponentProps<"div"> & VariantProps<typeof cardVariants> & {
-  /**
-   * Washi-tape pin slot: absolutely positioned decor anchored to the top
-   * edge. Content, not styling — pass e.g. a tape strip or sticker node.
-   */
-  pin?: React.ReactNode;
-};
+type CardProps = React.ComponentProps<"div"> &
+  VariantProps<typeof cardVariants> & {
+    /**
+     * Washi-tape pin slot: absolutely positioned decor anchored to the top
+     * edge. Content, not styling — pass e.g. a tape strip or sticker node.
+     */
+    pin?: React.ReactNode;
+    /** Semantic element to render the surface as, e.g. "article" or "li". */
+    as?: "div" | "article" | "header" | "li";
+  };
 
-function Card({ className, variant, pin, children, ...props }: CardProps) {
+function Card({ className, variant, pin, as, children, ...props }: CardProps) {
+  // JSX resolves a union tag against the strictest member (per-element ref
+  // instance types); the card surface spreads only shared HTML attributes,
+  // so the div typing is the safe common denominator for the spread below.
+  const Tag = (as ?? "div") as "div";
   return (
-    <div
-      data-slot="card"
-      className={cn(cardVariants({ variant }), className)}
-      {...props}
-    >
+    <Tag data-slot="card" className={cn(cardVariants({ variant }), className)} {...props}>
       {pin ? (
-        <div data-slot="card-pin" className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 -rotate-3">
+        <div
+          data-slot="card-pin"
+          className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 -rotate-3"
+        >
           {pin}
         </div>
       ) : null}
       {children}
-    </div>
+    </Tag>
   );
 }
 
@@ -78,9 +85,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div data-slot="card-content" className={cn("p-4 pt-0", className)} {...props} />
-  );
+  return <div data-slot="card-content" className={cn("p-4 pt-0", className)} {...props} />;
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {

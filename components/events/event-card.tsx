@@ -7,6 +7,8 @@ import { cn } from "cn";
 import { formatEventTime, formatPrice } from "@/lib/date-format";
 import { linkOutRel } from "@/lib/linkout/redirect-target";
 
+import { Card } from "@/components/ui/card";
+
 import { SourceBadge } from "./source-badge";
 import type { EventSummary } from "./types";
 
@@ -43,10 +45,7 @@ export function EventCard({
   className,
 }: EventCardProps) {
   return (
-    <article
-      data-slot="event-card"
-      className={cn("border-border bg-card rounded-xl border p-4", className)}
-    >
+    <Card as="article" data-slot="event-card" className={cn("p-4", className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-muted-foreground text-xs font-medium">
@@ -81,6 +80,6 @@ export function EventCard({
           View at {event.source.label} <span aria-hidden>↗</span>
         </a>
       </div>
-    </article>
+    </Card>
   );
 }

@@ -49,20 +49,23 @@ export function SaveButtonContainer({
 
   if (saved) {
     return (
-      <SaveButton
-        state="saved"
-        onUnsave={() =>
-          startTransition(async () => {
-            setSaved(false);
-            const result =
-              targetType === "event"
-                ? await unsaveEventAction(targetId)
-                : await unsaveCommunityAction(targetId);
-            if (!result.ok) setSaved(true);
-            router.refresh();
-          })
-        }
-      />
+      <>
+        <WashiTape />
+        <SaveButton
+          state="saved"
+          onUnsave={() =>
+            startTransition(async () => {
+              setSaved(false);
+              const result =
+                targetType === "event"
+                  ? await unsaveEventAction(targetId)
+                  : await unsaveCommunityAction(targetId);
+              if (!result.ok) setSaved(true);
+              router.refresh();
+            })
+          }
+        />
+      </>
     );
   }
 
@@ -80,6 +83,22 @@ export function SaveButtonContainer({
           router.refresh();
         })
       }
+    />
+  );
+}
+
+/**
+ * Washi-tape strip pinned across the card's top edge — the saved-state card
+ * treatment. Anchors to the nearest positioned ancestor (the Card surface
+ * the save button lives in), so it renders only inside cards. Decor only:
+ * outside the a11y tree and pointer, so no selector or role query sees it.
+ */
+function WashiTape() {
+  return (
+    <span
+      aria-hidden
+      data-slot="washi-tape"
+      className="bg-ink-blue/70 pointer-events-none absolute -top-3 left-1/2 z-10 h-6 w-24 -translate-x-1/2 -rotate-3"
     />
   );
 }

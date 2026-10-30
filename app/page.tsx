@@ -5,6 +5,7 @@ import { AdSlot } from "@/components/events/ad-slot";
 import { EventCard } from "@/components/events/event-card";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
 import type { EventSummary } from "@/components/events/types";
+import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { filtersToEventPath, formatSlugLabel } from "@/lib/events/params";
@@ -37,7 +38,10 @@ function EventList({
           venue: event.venue ?? "",
           neighborhood: event.neighborhood ?? "",
           isFree: event.priceType === "free",
-          priceCents: event.priceType === "paid" ? (event.priceMax ?? event.priceMin ?? undefined) : undefined,
+          priceCents:
+            event.priceType === "paid"
+              ? (event.priceMax ?? event.priceMin ?? undefined)
+              : undefined,
           source: { slug: event.sourceSlug, label: event.sourceLabel },
           url: event.canonicalUrl,
         };
@@ -139,12 +143,14 @@ export default async function Home() {
                   })}
                   data-slot="persona-entry"
                   data-persona={persona}
-                  className="border-border bg-card hover:border-primary rounded-xl border p-4 transition-colors"
+                  className="block"
                 >
-                  <span className="block text-sm font-semibold">{formatSlugLabel(persona)}</span>
-                  <span className="text-muted-foreground mt-0.5 block text-xs">
-                    {eventCount} upcoming {eventCount === 1 ? "event" : "events"}
-                  </span>
+                  <Card className="p-4">
+                    <span className="block text-sm font-semibold">{formatSlugLabel(persona)}</span>
+                    <span className="text-muted-foreground mt-0.5 block text-xs">
+                      {eventCount} upcoming {eventCount === 1 ? "event" : "events"}
+                    </span>
+                  </Card>
                 </Link>
               ))}
             </div>

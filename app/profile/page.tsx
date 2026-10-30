@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { AppHeader } from "@/components/auth/app-header";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
+import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { users } from "@/lib/db/schema";
@@ -46,10 +47,11 @@ export default async function ProfilePage() {
           ) : (
             <ul className="mt-3 flex flex-col gap-3">
               {savedEvents.map((event) => (
-                <li
+                <Card
+                  as="li"
                   key={event.eventId}
                   data-slot="saved-event"
-                  className="border-border bg-card flex items-center justify-between gap-4 rounded-xl border p-4"
+                  className="flex items-center justify-between gap-4 p-4"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{event.title}</p>
@@ -72,7 +74,7 @@ export default async function ProfilePage() {
                     signedIn
                     nextPath="/profile"
                   />
-                </li>
+                </Card>
               ))}
             </ul>
           )}
@@ -87,10 +89,11 @@ export default async function ProfilePage() {
           ) : (
             <ul className="mt-3 flex flex-col gap-3">
               {savedCommunities.map((community) => (
-                <li
+                <Card
+                  as="li"
                   key={community.communityId}
                   data-slot="saved-community"
-                  className="border-border bg-card flex items-center justify-between gap-4 rounded-xl border p-4"
+                  className="flex items-center justify-between gap-4 p-4"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{community.name}</p>
@@ -105,7 +108,7 @@ export default async function ProfilePage() {
                     signedIn
                     nextPath="/profile"
                   />
-                </li>
+                </Card>
               ))}
             </ul>
           )}
