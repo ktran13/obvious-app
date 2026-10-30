@@ -16,7 +16,10 @@ export function DayGroup({ heading, children, className }: DayGroupProps) {
     <section
       data-slot="day-group"
       aria-label={`Events on ${heading}`}
-      className={cn("space-y-3", className)}
+      // riso-fade-slide: page-flip fade on mount — replays when a filter
+      // change remounts the groups (deliverable 6); a pure fade under
+      // prefers-reduced-motion.
+      className={cn("riso-fade-slide space-y-3", className)}
     >
       <h2 className="text-lg font-semibold tracking-tight">{heading}</h2>
       <div className="space-y-3">{children}</div>
