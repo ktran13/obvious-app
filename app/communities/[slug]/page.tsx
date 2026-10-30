@@ -6,6 +6,8 @@ import { DayGroup } from "@/components/events/day-group";
 import { EventCard } from "@/components/events/event-card";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
 import type { EventSummary } from "@/components/events/types";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { getCommunityDetail } from "@/lib/communities/queries";
 import { isCommunitySaved } from "@/lib/saves/queries";
 import { auth } from "@/lib/auth";
@@ -54,19 +56,19 @@ export default async function CommunityDetailPage({ params }: CommunityDetailPag
     <div className="min-h-screen">
       <AppHeader />
       <main className="mx-auto max-w-3xl px-4 py-8">
-        <header data-slot="community-header" className="rounded-xl border border-border bg-card p-5">
+        <Card as="header" data-slot="community-header" className="p-5">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <h1 className="text-2xl font-semibold">{community.name}</h1>
               {community.description ? (
-                <p className="mt-1 text-sm text-muted-foreground">{community.description}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{community.description}</p>
               ) : null}
               {interests.length > 0 ? (
-                <div className="mt-3 flex flex-wrap gap-1.5 text-xs text-muted-foreground">
+                <div className="text-muted-foreground mt-3 flex flex-wrap gap-1.5 text-xs">
                   {interests.map((interest) => (
-                    <span key={interest} className="rounded-full border border-border px-2 py-0.5">
+                    <Badge key={interest} variant="outline">
                       {interest}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               ) : null}
@@ -84,19 +86,19 @@ export default async function CommunityDetailPage({ params }: CommunityDetailPag
                   href={community.canonicalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+                  className="text-primary text-sm font-medium underline-offset-4 hover:underline"
                 >
                   Visit organizer&apos;s page <span aria-hidden>↗</span>
                 </a>
               ) : null}
             </div>
           </div>
-        </header>
+        </Card>
 
         <section className="mt-8">
           <h2 className="text-lg font-semibold tracking-tight">Upcoming events</h2>
           {upcomingEvents.length === 0 ? (
-            <p className="mt-4 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            <p className="border-border text-muted-foreground mt-4 rounded-xl border border-dashed p-8 text-center text-sm">
               This organizer has no upcoming events right now.
             </p>
           ) : (
@@ -138,9 +140,12 @@ export default async function CommunityDetailPage({ params }: CommunityDetailPag
           )}
         </section>
 
-        <p className="mt-8 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-8 text-sm">
           Browsing everything? Head back to the{" "}
-          <Link href="/communities" className="font-medium text-primary underline-offset-4 hover:underline">
+          <Link
+            href="/communities"
+            className="text-primary font-medium underline-offset-4 hover:underline"
+          >
             community directory
           </Link>
           .

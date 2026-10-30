@@ -1,4 +1,4 @@
-import { cn } from "cn";
+import { Badge } from "@/components/ui/badge";
 
 import type { EventSource } from "./types";
 
@@ -8,19 +8,14 @@ type SourceBadgeProps = {
 };
 
 /**
- * Attribution pill naming the upstream listing source — a stamp-pill: 2px
- * ink outline on paper, ink-black text (was the muted shadcn pill).
+ * Attribution pill naming the upstream listing source — the rounded
+ * ink-colored stamp pill, composed from the ui/badge primitive (2px ink
+ * outline on paper, ink-black text).
  */
 export function SourceBadge({ source, className }: SourceBadgeProps) {
   return (
-    <span
-      data-slot="source-badge"
-      className={cn(
-        "border-ink-black bg-card text-foreground inline-flex items-center rounded-full border-2 px-2 py-0.5 text-xs font-medium",
-        className,
-      )}
-    >
+    <Badge data-slot="source-badge" variant="outline" className={className}>
       via {source.label}
-    </span>
+    </Badge>
   );
 }

@@ -2,6 +2,8 @@ import { desc, eq } from "drizzle-orm";
 import Link from "next/link";
 
 import { AdSlot } from "@/components/events/ad-slot";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { getDb } from "@/lib/db";
 import { jobPostings, type JobPosting } from "@/lib/db/schema";
 import { formatPostedDate } from "@/lib/jobs/display";
@@ -16,38 +18,29 @@ type JobsPageProps = {
 
 function JobCard({ posting }: { posting: JobPosting }) {
   return (
-    <article
-      data-slot="job-posting"
-      className="rounded-xl border border-border bg-card p-4"
-    >
+    <Card as="article" data-slot="job-posting" className="p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-base font-semibold">{posting.title}</h3>
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            {posting.company}
-          </p>
+          <p className="text-muted-foreground mt-0.5 text-sm">{posting.company}</p>
         </div>
-        <span className="shrink-0 rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-          {posting.interestSlug}
-        </span>
+        <Badge variant="outline">{posting.interestSlug}</Badge>
       </div>
-      {posting.description ? (
-        <p className="mt-2 text-sm">{posting.description}</p>
-      ) : null}
+      {posting.description ? <p className="mt-2 text-sm">{posting.description}</p> : null}
       <div className="mt-3 flex items-center justify-between gap-3">
-        <span className="text-xs text-muted-foreground">
+        <span className="text-muted-foreground text-xs">
           Posted {formatPostedDate(posting.postedAt)}
         </span>
         <a
           href={posting.applyUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+          className="text-primary text-sm font-medium underline-offset-4 hover:underline"
         >
           Apply <span aria-hidden>↗</span>
         </a>
       </div>
-    </article>
+    </Card>
   );
 }
 
@@ -63,15 +56,13 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
       .from(jobPostings)
       .where(interest ? eq(jobPostings.interestSlug, interest) : undefined)
       .orderBy(desc(jobPostings.postedAt)),
-    db
-      .selectDistinct({ slug: jobPostings.interestSlug })
-      .from(jobPostings),
+    db.selectDistinct({ slug: jobPostings.interestSlug }).from(jobPostings),
   ]);
   const interests = interestRows.map((row) => row.slug).sort();
 
   return (
     <div className="mx-auto min-h-screen max-w-5xl px-6 py-6 font-sans">
-      <header className="flex items-center justify-between border-b border-border pb-4">
+      <header className="border-border flex items-center justify-between border-b pb-4">
         <p className="text-lg font-semibold">
           <Link href="/">NYC Discovery</Link>
         </p>
@@ -87,21 +78,17 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
 
       <main className="py-8">
         <h1 className="text-3xl font-bold tracking-tight">Jobs</h1>
-        <p className="mt-2 text-muted-foreground">
-          Openings at NYC community organizations and local shops — apply at
-          the source.
+        <p className="text-muted-foreground mt-2">
+          Openings at NYC community organizations and local shops — apply at the source.
         </p>
 
-        <nav
-          aria-label="Filter by interest"
-          className="mt-6 flex flex-wrap gap-2"
-        >
+        <nav aria-label="Filter by interest" className="mt-6 flex flex-wrap gap-2">
           <Link
             href="/jobs"
             aria-current={interest === null ? "true" : undefined}
             className={`rounded-full border px-3 py-1 text-sm font-medium ${
               interest === null
-                ? "border-transparent bg-primary text-primary-foreground"
+                ? "bg-primary text-primary-foreground border-transparent"
                 : "border-border hover:bg-muted"
             }`}
           >
@@ -114,7 +101,7 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
               aria-current={interest === slug ? "true" : undefined}
               className={`rounded-full border px-3 py-1 text-sm font-medium ${
                 interest === slug
-                  ? "border-transparent bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground border-transparent"
                   : "border-border hover:bg-muted"
               }`}
             >
@@ -130,7 +117,7 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
             ))}
           </div>
         ) : (
-          <p className="mt-6 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-6 text-sm">
             No postings for this interest yet — check back soon.
           </p>
         )}
