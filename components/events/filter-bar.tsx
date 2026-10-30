@@ -20,8 +20,20 @@ type FilterBarProps = {
   className?: string;
 };
 
-const selectClass =
-  "h-8 rounded-lg border border-border bg-background px-2 text-sm";
+/**
+ * Stamp-pill select styling — the single styling point for every FilterBar
+ * select (the URL-synced wrapper reuses FilterBar, so both stay in step).
+ * A chosen value flips the pill to the magenta selected stamp; text stays
+ * ink-black on magenta (contrast lock L3). Names, labels, values, and
+ * onChange wiring are untouched by this styling.
+ */
+const selectClass = (selected: boolean) =>
+  cn(
+    "h-8 rounded-full border-2 px-3 text-sm font-medium transition-colors",
+    selected
+      ? "border-ink-magenta bg-ink-magenta text-ink-black"
+      : "border-ink-black bg-card text-foreground hover:bg-muted",
+  );
 
 /**
  * Controlled filter controls. All selected values render from `filters`;
@@ -30,14 +42,8 @@ const selectClass =
  * Labels associate via htmlFor/id (not wrapping) so each control's
  * accessible name is exactly the label text, not "Day Any day".
  */
-export function FilterBar({
-  filters,
-  options,
-  onChange,
-  className,
-}: FilterBarProps) {
-  const update = (patch: Partial<EventFilters>) =>
-    onChange?.({ ...filters, ...patch });
+export function FilterBar({ filters, options, onChange, className }: FilterBarProps) {
+  const update = (patch: Partial<EventFilters>) => onChange?.({ ...filters, ...patch });
 
   const selectControl = (
     id: string,
@@ -47,11 +53,11 @@ export function FilterBar({
     choices: string[],
     emptyChoice: string,
   ) => (
-    <div className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
+    <div className="text-muted-foreground flex flex-col gap-1 text-xs font-medium">
       <label htmlFor={id}>{label}</label>
       <select
         id={id}
-        className={selectClass}
+        className={selectClass(value !== "")}
         value={value}
         onChange={(e) => onValue(e.target.value)}
       >
@@ -124,7 +130,7 @@ export function FilterBar({
           type="checkbox"
           checked={filters.freeOnly}
           onChange={(e) => update({ freeOnly: e.target.checked })}
-          className="size-4 rounded border-border accent-primary"
+          className="border-border accent-primary size-4 rounded"
         />
         <label htmlFor="filter-free">Free only</label>
       </div>
