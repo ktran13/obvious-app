@@ -11,6 +11,8 @@ type SaveButtonProps = {
   onSave?: () => void;
   /** Clicked while prompting: the visitor is signed out. */
   onSignInClick?: () => void;
+  /** Clicked while saved: toggles the save off. No-op when omitted. */
+  onUnsave?: () => void;
   className?: string;
 };
 
@@ -23,6 +25,7 @@ export function SaveButton({
   state = "idle",
   onSave,
   onSignInClick,
+  onUnsave,
   className,
 }: SaveButtonProps) {
   if (state === "saved") {
@@ -32,6 +35,7 @@ export function SaveButton({
         aria-pressed="true"
         data-slot="save-button"
         data-state="saved"
+        onClick={onUnsave}
         className={cn(
           "inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground",
           className,

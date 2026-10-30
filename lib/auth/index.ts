@@ -32,6 +32,29 @@ const DEV_MOCK_USER = {
   image: null,
 };
 
+/**
+ * Credentials sign-in never runs the adapter's createUser/linkAccount, so the
+ * mock provider persists its user and account link itself — exactly what a
+ * real OAuth callback does. Without this, saves would fail the
+ * saved_items_user_id_users_id_fk foreign key.
+ */
+async function upsertDevMockUser() {
+  const db = getDb();
+  await db
+    .insert(users)
+    .values({ ...DEV_MOCK_USER, emailVerified: null })
+    .onConflictDoNothing();
+  await db
+    .insert(accounts)
+    .values({
+      userId: DEV_MOCK_USER.id,
+      type: "oauth",
+      provider: DEV_MOCK_PROVIDER_ID,
+      providerAccountId: DEV_MOCK_USER.id,
+    })
+    .onConflictDoNothing();
+}
+
 export const devMockEnabled =
   process.env.AUTH_DEV_MOCK === "true" && process.env.NODE_ENV !== "production";
 
@@ -56,7 +79,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             id: DEV_MOCK_PROVIDER_ID,
             name: "Google (Dev Mock)",
             credentials: {},
-            authorize: () => (devMockEnabled ? DEV_MOCK_USER : null),
+            authorize: async () => {
+              if (!devMockEnabled) return null;
+              await upsertDevMockUser();
+              return DEV_MOCK_USER;
+            },
           }),
         ]
       : []),
