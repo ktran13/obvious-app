@@ -68,3 +68,14 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # E2E runs against the built app; DB already migrated above, seed the
+      # deterministic fixtures the suites assert on.
+      - name: Seed database
+        run: pnpm db:seed
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: E2E tests
+        run: pnpm e2e
