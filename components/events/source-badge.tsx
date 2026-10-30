@@ -7,13 +7,16 @@ type SourceBadgeProps = {
   className?: string;
 };
 
-/** Attribution pill naming the upstream listing source. */
+/**
+ * Attribution pill naming the upstream listing source — a stamp-pill: 2px
+ * ink outline on paper, ink-black text (was the muted shadcn pill).
+ */
 export function SourceBadge({ source, className }: SourceBadgeProps) {
   return (
     <span
       data-slot="source-badge"
       className={cn(
-        "border-border bg-muted text-muted-foreground inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
+        "border-ink-black bg-card text-foreground inline-flex items-center rounded-full border-2 px-2 py-0.5 text-xs font-medium",
         className,
       )}
     >
