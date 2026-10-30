@@ -5,6 +5,7 @@ import { AdSlot } from "@/components/events/ad-slot";
 import { DayGroup } from "@/components/events/day-group";
 import { EventCard } from "@/components/events/event-card";
 import { FilterBarUrl } from "@/components/events/filter-bar-url";
+import { SaveMyFilters } from "@/components/events/save-my-filters";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
 import type { EventSummary } from "@/components/events/types";
 import { auth } from "@/lib/auth";
@@ -15,10 +16,14 @@ import { groupEventsByDay } from "@/lib/events/grouping";
 import {
   filtersToEventPath,
   filtersToSearchParams,
+  hasExplicitFilterParams,
   parseEventFilterParams,
+  savedFiltersToEventFilters,
   toEventFilter,
 } from "@/lib/events/params";
 import { getFilterOptions, listDirectoryEvents } from "@/lib/events/queries";
+import { getFilterPreferences } from "@/lib/preferences/queries";
+import type { EventFilter } from "@/lib/schemas/event-filters";
 
 export const dynamic = "force-dynamic";
 
@@ -39,18 +44,28 @@ type EventsPageProps = {
  * The directory — anonymous-first, server-rendered from the URL. Filters
  * arrive as search params (?interest, ?persona, ?when, ?day, ?free, ?n);
  * results are ordered by startsAt ascending and grouped under NY
- * calendar-day headings. No session is required to browse; signing in only
- * unlocks the save affordance on each card.
+ * calendar-day headings. No session is required to browse; signing in
+ * unlocks the save affordance on each card plus the saved-filter control.
+ *
+ * Rev 2.3 precedence: a URL with explicit filter params is a deep link and
+ * wins wholesale; on a bare /events a signed-in user's saved filter set is
+ * pre-applied server-side (URL stays clean — one source of truth per mode).
  */
 export default async function EventsPage({ searchParams }: EventsPageProps) {
   const params = await searchParams;
-  const filters = parseEventFilterParams(params);
-
+  const session = await auth();
   const db = getDb();
-  const [rows, options, session] = await Promise.all([
+
+  let filters = parseEventFilterParams(params);
+  let savedFilters: EventFilter | null = null;
+  if (session?.user?.id && !hasExplicitFilterParams(params)) {
+    savedFilters = await getFilterPreferences(db, session.user.id);
+    if (savedFilters) filters = savedFiltersToEventFilters(savedFilters);
+  }
+
+  const [rows, options] = await Promise.all([
     listDirectoryEvents(db, toEventFilter(filters)),
     getFilterOptions(db),
-    auth(),
   ]);
 
   const now = new Date();
@@ -82,6 +97,10 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
             neighborhoods: options.neighborhoods,
           }}
         />
+
+        {session?.user && (
+          <SaveMyFilters filters={filters} hasSaved={savedFilters !== null} className="mt-3" />
+        )}
 
         <AdSlot label="Sponsored" className="mt-6" />
 

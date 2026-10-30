@@ -6,6 +6,8 @@ import {
   filtersToSearchParams,
   formatSlugLabel,
   parseEventFilterParams,
+  hasExplicitFilterParams,
+  savedFiltersToEventFilters,
   toEventFilter,
 } from "./params";
 
@@ -142,5 +144,51 @@ describe("formatSlugLabel", () => {
   it("prettifies taxonomy slugs", () => {
     expect(formatSlugLabel("dog-owners")).toBe("Dog owners");
     expect(formatSlugLabel("lgbtq")).toBe("Lgbtq");
+  });
+});
+
+describe("hasExplicitFilterParams", () => {
+  it("detects every filter param as an explicit deep link", () => {
+    for (const key of ["interest", "persona", "when", "day", "free", "n"]) {
+      expect(hasExplicitFilterParams({ [key]: "x" })).toBe(true);
+    }
+  });
+
+  it("is false for a bare /events visit, so saved prefs may pre-apply", () => {
+    expect(hasExplicitFilterParams({})).toBe(false);
+    expect(hasExplicitFilterParams({ page: "2" })).toBe(false);
+  });
+});
+
+describe("savedFiltersToEventFilters", () => {
+  it("maps the stored shape onto the FilterBar shape", () => {
+    expect(
+      savedFiltersToEventFilters({
+        interests: ["music"],
+        personas: ["professionals"],
+        neighborhood: "bushwick",
+        day: "2026-11-07",
+        when: "week",
+        free: true,
+      }),
+    ).toEqual({
+      interests: ["music"],
+      persona: "professionals",
+      when: "week",
+      day: "2026-11-07",
+      freeOnly: true,
+      neighborhoods: ["bushwick"],
+    });
+  });
+
+  it("renders an all-clear saved set as defaults", () => {
+    expect(savedFiltersToEventFilters({ interests: [], personas: [] })).toEqual({
+      interests: [],
+      persona: null,
+      when: null,
+      day: null,
+      freeOnly: false,
+      neighborhoods: [],
+    });
   });
 });
