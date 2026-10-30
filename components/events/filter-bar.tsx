@@ -26,6 +26,9 @@ const selectClass =
 /**
  * Controlled filter controls. All selected values render from `filters`;
  * changes are reported upward via `onChange` — no local or global state.
+ *
+ * Labels associate via htmlFor/id (not wrapping) so each control's
+ * accessible name is exactly the label text, not "Day Any day".
  */
 export function FilterBar({
   filters,
@@ -36,6 +39,32 @@ export function FilterBar({
   const update = (patch: Partial<EventFilters>) =>
     onChange?.({ ...filters, ...patch });
 
+  const selectControl = (
+    id: string,
+    label: string,
+    value: string,
+    onValue: (next: string) => void,
+    choices: string[],
+    emptyChoice: string,
+  ) => (
+    <div className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
+      <label htmlFor={id}>{label}</label>
+      <select
+        id={id}
+        className={selectClass}
+        value={value}
+        onChange={(e) => onValue(e.target.value)}
+      >
+        <option value="">{emptyChoice}</option>
+        {choices.map((choice) => (
+          <option key={choice} value={choice}>
+            {choice}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
   return (
     <form
       data-slot="filter-bar"
@@ -44,101 +73,61 @@ export function FilterBar({
       onSubmit={(e) => e.preventDefault()}
       className={cn("flex flex-wrap items-end gap-3", className)}
     >
-      <label className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-        Interest
-        <select
-          className={selectClass}
-          value={filters.interests[0] ?? ""}
-          onChange={(e) =>
-            update({ interests: e.target.value ? [e.target.value] : [] })
-          }
-        >
-          <option value="">All interests</option>
-          {options.interests.map((interest) => (
-            <option key={interest} value={interest}>
-              {interest}
-            </option>
-          ))}
-        </select>
-      </label>
+      {selectControl(
+        "filter-interest",
+        "Interest",
+        filters.interests[0] ?? "",
+        (v) => update({ interests: v ? [v] : [] }),
+        options.interests,
+        "All interests",
+      )}
 
-      <label className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-        Persona
-        <select
-          className={selectClass}
-          value={filters.persona ?? ""}
-          onChange={(e) => update({ persona: e.target.value || null })}
-        >
-          <option value="">Any persona</option>
-          {options.personas.map((persona) => (
-            <option key={persona} value={persona}>
-              {persona}
-            </option>
-          ))}
-        </select>
-      </label>
+      {selectControl(
+        "filter-persona",
+        "Persona",
+        filters.persona ?? "",
+        (v) => update({ persona: v || null }),
+        options.personas,
+        "Any persona",
+      )}
 
-      <label className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-        When
-        <select
-          className={selectClass}
-          value={filters.when ?? ""}
-          onChange={(e) => update({ when: e.target.value || null })}
-        >
-          <option value="">Any time</option>
-          {options.when.map((preset) => (
-            <option key={preset} value={preset}>
-              {preset}
-            </option>
-          ))}
-        </select>
-      </label>
+      {selectControl(
+        "filter-when",
+        "When",
+        filters.when ?? "",
+        (v) => update({ when: v || null }),
+        options.when,
+        "Any time",
+      )}
 
-      <label className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-        Day
-        <select
-          className={selectClass}
-          value={filters.day ?? ""}
-          onChange={(e) => update({ day: e.target.value || null })}
-        >
-          <option value="">Any day</option>
-          {options.days.map((day) => (
-            <option key={day} value={day}>
-              {day}
-            </option>
-          ))}
-        </select>
-      </label>
+      {selectControl(
+        "filter-day",
+        "Day",
+        filters.day ?? "",
+        (v) => update({ day: v || null }),
+        options.days,
+        "Any day",
+      )}
 
-      <label className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-        Neighborhood
-        <select
-          className={selectClass}
-          value={filters.neighborhoods[0] ?? ""}
-          onChange={(e) =>
-            update({
-              neighborhoods: e.target.value ? [e.target.value] : [],
-            })
-          }
-        >
-          <option value="">All neighborhoods</option>
-          {options.neighborhoods.map((neighborhood) => (
-            <option key={neighborhood} value={neighborhood}>
-              {neighborhood}
-            </option>
-          ))}
-        </select>
-      </label>
+      {selectControl(
+        "filter-neighborhood",
+        "Neighborhood",
+        filters.neighborhoods[0] ?? "",
+        (v) => update({ neighborhoods: v ? [v] : [] }),
+        options.neighborhoods,
+        "All neighborhoods",
+      )}
 
-      <label className="flex h-8 items-center gap-1.5 text-sm font-medium">
+      <div className="flex h-8 items-center gap-1.5 text-sm font-medium">
         <input
+          id="filter-free"
           type="checkbox"
           checked={filters.freeOnly}
           onChange={(e) => update({ freeOnly: e.target.checked })}
           className="size-4 rounded border-border accent-primary"
         />
-        Free only
-      </label>
+        <label htmlFor="filter-free">Free only</label>
+      </div>
     </form>
   );
 }
