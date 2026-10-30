@@ -8,6 +8,23 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: nyc_app
+          POSTGRES_PASSWORD: nyc_app
+          POSTGRES_DB: nyc_app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nyc_app -d nyc_app"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Matches docker-compose.yml / .env.example; db:check + schema tests need it.
+      DATABASE_URL: postgresql://nyc_app:nyc_app@localhost:5432/nyc_app
     steps:
       - uses: actions/checkout@v4
 
@@ -29,6 +46,13 @@ jobs:
             echo "::error::Cloud-provider SDK dependencies (@aws-sdk/*, @azure/*) are not allowed."
             exit 1
           fi
+
+      - name: Apply migrations
+        run: pnpm db:migrate
+
+      # Schema in code must match committed migrations exactly.
+      - name: Drizzle drift check
+        run: pnpm db:check
 
       - name: Lint
         run: pnpm lint
