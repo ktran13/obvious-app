@@ -14,6 +14,13 @@ export async function AppHeader() {
           NYC Discovery
         </Link>
         <nav className="flex items-center gap-4 text-sm">
+          <Link
+            href="/communities"
+            data-slot="nav-communities"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Communities
+          </Link>
           {session?.user ? (
             <span className="flex items-center gap-3">
               <span data-slot="nav-user">{session.user.name ?? session.user.email}</span>

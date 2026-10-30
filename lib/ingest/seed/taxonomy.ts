@@ -64,5 +64,5 @@ export const PERSONA_TAGS: string[] = PERSONAS.map((p) => `persona:${p}`);
 
 /** Prefix guards for seed-time validation — tags must be prefixed slugs. */
 export function isValidTag(tag: string): boolean {
-  return /^(interest|persona):[a-z0-9_-]+$/.test(tag);
+  return /^(interest|persona|community):[a-z0-9_-]+$/.test(tag);
 }
