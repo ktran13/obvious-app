@@ -14,6 +14,7 @@ import { eq, sql } from "drizzle-orm";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { getDb } from "../../db";
+import { resolveDatabaseUrl } from "../../db/url";
 import { communities, jobPostings, sources } from "../../db/schema";
 import { validateParsedEvents } from "../validate";
 import { isEventStale, upsertEvents } from "../sync";
@@ -132,6 +133,16 @@ const invokedAsScript =
   import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (invokedAsScript) {
+  // Running outside Next, nothing loads .env.local — try Node's built-in
+  // loader, then fall back to the shared compose default (same pattern as
+  // scripts/seed-demo.ts) so `pnpm db:seed` works verbatim from the README.
+  try {
+    process.loadEnvFile(".env.local");
+  } catch {
+    // no .env.local — the default below still matches docker-compose
+  }
+  process.env.DATABASE_URL ??= resolveDatabaseUrl();
+
   runSeed(getDb())
     .then((summary) => {
       console.log(

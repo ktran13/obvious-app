@@ -1,12 +1,18 @@
 "use client";
 
+import Link from "next/link";
+
 import { cn } from "cn";
 
-import { formatEventTime } from "@/lib/date-format";
+import { formatEventTime, formatPrice } from "@/lib/date-format";
 import { linkOutRel } from "@/lib/linkout/redirect-target";
 
 import { SourceBadge } from "./source-badge";
 import type { EventSummary } from "./types";
+
+// Re-exported for the directory surfaces; the single definition lives in
+// lib/date-format so server-side code (JSON-LD) shares it.
+export { formatPrice };
 
 type EventCardProps = {
   event: EventSummary;
@@ -21,13 +27,10 @@ type EventCardProps = {
   tracked?: boolean;
   /** The event's affiliate URL, when a partner link exists — adds rel="sponsored". */
   affiliateUrl?: string | null;
+  /** In-app detail page ("/events/[id]") — renders the title as an internal link when present. */
+  detailHref?: string;
   className?: string;
 };
-
-export function formatPrice(priceCents: number): string {
-  const dollars = priceCents / 100;
-  return Number.isInteger(dollars) ? `$${dollars}` : `$${dollars.toFixed(2)}`;
-}
 
 /** Presentational event card: every value arrives via props, nothing fetches. */
 export function EventCard({
@@ -36,6 +39,7 @@ export function EventCard({
   saveButton,
   tracked = false,
   affiliateUrl,
+  detailHref,
   className,
 }: EventCardProps) {
   return (
@@ -48,7 +52,15 @@ export function EventCard({
           <p className="text-muted-foreground text-xs font-medium">
             {formatEventTime(event.startsAt, timeZone)}
           </p>
-          <h3 className="mt-0.5 text-base font-semibold">{event.title}</h3>
+          <h3 className="mt-0.5 text-base font-semibold">
+            {detailHref ? (
+              <Link href={detailHref} className="hover:underline">
+                {event.title}
+              </Link>
+            ) : (
+              event.title
+            )}
+          </h3>
           <p className="text-muted-foreground mt-0.5 text-sm">
             <span>{event.venue}</span> · <span>{event.neighborhood}</span>
           </p>

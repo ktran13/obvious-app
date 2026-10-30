@@ -124,6 +124,7 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
                       <EventCard
                         key={event.id}
                         event={summary}
+                        detailHref={`/events/${event.id}`}
                         saveButton={
                           <SaveButtonContainer
                             targetType="event"

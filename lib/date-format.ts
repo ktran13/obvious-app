@@ -47,3 +47,9 @@ export function formatEventTime(
     minute: "2-digit",
   }).format(toDate(instant));
 }
+
+/** Cents → display dollars, e.g. 2500 → "$25", 4250 → "$42.50". */
+export function formatPrice(priceCents: number): string {
+  const dollars = priceCents / 100;
+  return Number.isInteger(dollars) ? `$${dollars}` : `$${dollars.toFixed(2)}`;
+}
