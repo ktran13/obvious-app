@@ -21,3 +21,16 @@ export const Outline: Story = {
 export const Secondary: Story = {
   args: { variant: "secondary", children: "Clear" },
 };
+
+/** Photocopy night: magenta fill keeps ink-black text (contrast lock — the
+ * same AA-passing pairing as light mode). */
+export const Dark: Story = {
+  args: { children: "Save event" },
+  decorators: [
+    (Story) => (
+      <div className="dark bg-background text-foreground rounded-lg p-4">
+        <Story />
+      </div>
+    ),
+  ],
+};

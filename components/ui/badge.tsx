@@ -4,7 +4,7 @@ import { cn } from "cn";
 
 const badgeVariants = cva(
   // Stamp pill: 2px ink outline, inline-flex, no rounded-square defaults.
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1 rounded-full border-2 border-ink-black px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1 rounded-full border-2 border-ink-black dark:border-foreground/30 px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3",
   {
     variants: {
       variant: {

@@ -21,7 +21,7 @@ export function AdSlot({ className, label = "Ad slot" }: AdSlotProps) {
       data-slot="ad-slot"
       aria-label={label}
       className={cn(
-        "border-ink-black bg-card relative flex min-h-24 -rotate-1 items-center justify-center border-2 p-4 pt-5 text-center",
+        "border-ink-black dark:border-foreground/30 bg-card relative flex min-h-24 -rotate-1 items-center justify-center border-2 p-4 pt-5 text-center",
         "shadow-[3px_3px_0_0_var(--color-ink-blue)]",
         className,
       )}

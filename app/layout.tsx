@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Caveat, Fraunces, Geist_Mono, Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -32,14 +34,26 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Runs pre-paint: stored choice wins, else prefers-color-scheme. Sets
+  // .dark on <html> before first render — no flash of light theme (FOUC).
+  const themeNoFlashScript = `(function(){try{var t=localStorage.getItem("riso-theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
+
   return (
     <html
       lang="en"
       className={`${inter.variable} ${fraunces.variable} ${caveat.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
     >
       {/* Font variables live on <html>: the base layer applies font-sans to
-          html, so the var() definitions must resolve at that scope. */}
-      <body className="antialiased">{children}</body>
+          html, so the var() definitions must resolve at that scope.
+          suppressHydrationWarning: the inline theme script mutates <html>'s
+          class before hydration by design. */}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeNoFlashScript }} />
+      </head>
+      <body className="antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

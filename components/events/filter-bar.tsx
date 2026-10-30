@@ -32,7 +32,7 @@ const selectClass = (selected: boolean) =>
     "h-8 rounded-full border-2 px-3 text-sm font-medium transition-colors",
     selected
       ? "border-ink-magenta bg-ink-magenta text-ink-black"
-      : "border-ink-black bg-card text-foreground hover:bg-muted",
+      : "border-ink-black dark:border-foreground/30 bg-card text-foreground hover:bg-muted",
   );
 
 /**
