@@ -247,3 +247,42 @@
 @utility riso-fade-slide {
   animation: riso-fade-slide var(--motion-slow) var(--motion-ease) both;
 }
+
+/* Accessibility lock L3: under prefers-reduced-motion every signature
+   motion collapses to an opacity fade. The wiggle and fade-slide re-bind to
+   the opacity-only keyframe; the card tilt and the button misregistration
+   hover offsets drop their transforms entirely. Resting decorative
+   transforms (e.g. the homepage stickers' rotate-12) are deliberately
+   untouched — they are layout, not motion. */
+@keyframes riso-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .riso-wiggle:hover,
+  .riso-fade-slide {
+    animation-name: riso-fade;
+    animation-duration: var(--motion-fast);
+  }
+
+  /* The transform signatures — the card tilt and the button misregistration
+     offsets — are matched by their own utilities rather than by data-slot:
+     Card consumers override data-slot (event cards render as "event-card"),
+     so the utilities cover every current and future use. Tailwind 4 sets
+     the individual rotate/translate/scale properties, not `transform`, so
+     those are what the collapse must zero. */
+  .hover\:rotate-1:hover,
+  .hover\:-translate-x-px:hover,
+  .hover\:-translate-y-px:hover,
+  .active\:translate-y-px:active {
+    rotate: none !important;
+    translate: none !important;
+    scale: none !important;
+    transition-property: opacity !important;
+  }
+}
