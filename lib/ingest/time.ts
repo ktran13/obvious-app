@@ -31,9 +31,7 @@ function timeZoneOffsetMs(utcMs: number, timeZone: string): number {
     minute: "2-digit",
     second: "2-digit",
   });
-  const parts = new Map(
-    dtf.formatToParts(new Date(utcMs)).map((p) => [p.type, p.value] as const),
-  );
+  const parts = new Map(dtf.formatToParts(new Date(utcMs)).map((p) => [p.type, p.value] as const));
   const asUtc = Date.UTC(
     Number(parts.get("year")),
     Number(parts.get("month")) - 1,
@@ -66,19 +64,14 @@ export function zonedTimeToUtc(parts: ZonedParts, timeZone: string = PRODUCT_TIM
  * are interpreted in the product timezone so fixtures can stay offset-free.
  * Returns null for unparseable input — callers decide whether that is fatal.
  */
-export function parseIsoOrZoned(
-  value: string,
-  timeZone: string = PRODUCT_TIMEZONE,
-): Date | null {
+export function parseIsoOrZoned(value: string, timeZone: string = PRODUCT_TIMEZONE): Date | null {
   const trimmed = value.trim();
   if (!trimmed) return null;
   if (/[zZ]$/.test(trimmed) || /[+-]\d{2}:\d{2}$/.test(trimmed)) {
     const parsed = new Date(trimmed);
     return Number.isNaN(parsed.getTime()) ? null : parsed;
   }
-  const m = trimmed.match(
-    /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}(?:\.\d+)?))?$/,
-  );
+  const m = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}(?:\.\d+)?))?$/);
   if (!m) return null;
   return zonedTimeToUtc(
     {
