@@ -6,6 +6,7 @@ import { EventCard } from "@/components/events/event-card";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
 import type { EventSummary } from "@/components/events/types";
 import { RisoGrain } from "@/components/marketing/riso-grain";
+import { Badge } from "@/components/ui/badge";
 
 import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
@@ -93,9 +94,7 @@ export default async function Home() {
           {/* Marketing texture: riso grain at --grain-opacity (texture-
               discipline rule — marketing surfaces only, never directories). */}
           <RisoGrain />
-          <h1 className="riso-misregister font-display text-3xl font-semibold">
-            Upcoming in NYC
-          </h1>
+          <h1 className="riso-misregister font-display text-3xl font-semibold">Upcoming in NYC</h1>
           <p className="text-muted-foreground mt-1 text-sm">
             Browse freely — sign in only if you want to save things.
           </p>
@@ -106,7 +105,6 @@ export default async function Home() {
             Browse the full events directory →
           </Link>
         </div>
-
 
         <section className="mt-8" aria-label="Tonight">
           <h2 className="text-lg font-semibold tracking-tight">Tonight</h2>
@@ -139,6 +137,11 @@ export default async function Home() {
         {personas.length > 0 && (
           <section className="mt-10" aria-label="Browse by who it's for">
             <h2 className="text-lg font-semibold tracking-tight">What brings you to the city?</h2>
+            {/* Hand-drawn Caveat annotation: marker accent on a marketing
+                feature surface (deliverable 4). */}
+            <p aria-hidden className="font-hand text-ink-blue mt-1 -rotate-2 text-lg leading-none">
+              pick your people ↓
+            </p>
             <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {personas.map(({ persona, eventCount }) => (
                 <Link
@@ -155,8 +158,18 @@ export default async function Home() {
                   data-persona={persona}
                   className="block"
                 >
-                  <Card className="p-4">
-                    <span className="block text-sm font-semibold">{formatSlugLabel(persona)}</span>
+                  {/* Torn-edge feature card (marketing surface) with a single
+                      starburst sticker — max one per card. */}
+                  <Card variant="feature" className="p-4">
+                    <Badge
+                      variant="starburst"
+                      className="font-hand absolute top-2 right-2 rotate-12 text-[10px] leading-none"
+                    >
+                      {eventCount} on
+                    </Badge>
+                    <span className="block pr-12 text-sm font-semibold">
+                      {formatSlugLabel(persona)}
+                    </span>
                     <span className="text-muted-foreground mt-0.5 block text-xs">
                       {eventCount} upcoming {eventCount === 1 ? "event" : "events"}
                     </span>
