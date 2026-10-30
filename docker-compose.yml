@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16
+    container_name: nyc-app-db
+    restart: unless-stopped
+    environment:
+      # Defaults match .env.example — override locally if you changed them there.
+      POSTGRES_USER: nyc_app
+      POSTGRES_PASSWORD: nyc_app
+      POSTGRES_DB: nyc_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nyc_app -d nyc_app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
