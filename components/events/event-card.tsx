@@ -3,6 +3,7 @@
 import { cn } from "cn";
 
 import { formatEventTime } from "@/lib/date-format";
+import { linkOutRel } from "@/lib/linkout/redirect-target";
 
 import { SourceBadge } from "./source-badge";
 import type { EventSummary } from "./types";
@@ -13,6 +14,13 @@ type EventCardProps = {
   timeZone?: string;
   /** Slot for a SaveButton (or any save affordance). */
   saveButton?: React.ReactNode;
+  /**
+   * Route the link-out through the tracked /go/[id] redirect instead of
+   * linking to the canonical URL directly (monetization surfaces do this).
+   */
+  tracked?: boolean;
+  /** The event's affiliate URL, when a partner link exists — adds rel="sponsored". */
+  affiliateUrl?: string | null;
   className?: string;
 };
 
@@ -26,6 +34,8 @@ export function EventCard({
   event,
   timeZone = "America/New_York",
   saveButton,
+  tracked = false,
+  affiliateUrl,
   className,
 }: EventCardProps) {
   return (
@@ -51,9 +61,9 @@ export function EventCard({
         </span>
         <SourceBadge source={event.source} />
         <a
-          href={event.url}
+          href={tracked && event.id ? `/go/${event.id}` : event.url}
           target="_blank"
-          rel="noopener noreferrer"
+          rel={linkOutRel(affiliateUrl)}
           className="ml-auto text-sm font-medium text-primary underline-offset-4 hover:underline"
         >
           View at {event.source.label} <span aria-hidden>↗</span>

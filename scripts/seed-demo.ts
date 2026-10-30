@@ -35,7 +35,8 @@ async function main() {
 
   // Starts relative to "now" so the home page's upcoming filter always shows them.
   const day = 24 * 60 * 60 * 1000;
-  const start = (offsetDays: number) => new Date(Date.now() + offsetDays * day);
+  const start = (offsetDays: number, offsetHours = 0) =>
+    new Date(Date.now() + offsetDays * day + offsetHours * 60 * 60 * 1000);
 
   await db
     .insert(events)
@@ -46,7 +47,7 @@ async function main() {
         canonicalUrl: "https://lu.ma/indie-makers-nyc",
         title: "Indie Web Makers Meetup",
         description: "Demo listing: show-and-tell for independent makers.",
-        startsAt: start(2),
+        startsAt: start(0, 1),
         venue: "Bushman Studios",
         neighborhood: "Bushwick",
         borough: "brooklyn",

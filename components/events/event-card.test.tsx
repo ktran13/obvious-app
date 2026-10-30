@@ -43,6 +43,32 @@ describe("EventCard", () => {
     expect(screen.getByText("8:30 PM")).toBeInTheDocument();
   });
 
+  it("routes the link through the tracked /go redirect when tracked", () => {
+    render(<EventCard event={paid} tracked />);
+
+    const link = screen.getByRole("link", {
+      name: new RegExp(`View at ${paid.source.label}`),
+    });
+    expect(link).toHaveAttribute("href", `/go/${paid.id}`);
+    // No affiliate URL → canonical destination, no sponsored marker.
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("marks affiliate link-outs with rel=sponsored", () => {
+    render(
+      <EventCard
+        event={paid}
+        tracked
+        affiliateUrl="https://partner.example.com/x?aff=us"
+      />,
+    );
+
+    const link = screen.getByRole("link", {
+      name: new RegExp(`View at ${paid.source.label}`),
+    });
+    expect(link).toHaveAttribute("rel", "sponsored noopener noreferrer");
+  });
+
   it("renders a save button passed through the slot", () => {
     render(<EventCard event={free} saveButton={<button>Save</button>} />);
     expect(

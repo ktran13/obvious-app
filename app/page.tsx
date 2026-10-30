@@ -4,6 +4,7 @@ import { AppHeader } from "@/components/auth/app-header";
 import { EventCard } from "@/components/events/event-card";
 import { SaveButtonContainer } from "@/components/events/save-button-container";
 import type { EventSummary } from "@/components/events/types";
+import { AdSlot } from "@/components/events/ad-slot";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { events, sources } from "@/lib/db/schema";
@@ -29,7 +30,9 @@ export default async function Home() {
       neighborhood: events.neighborhood,
       canonicalUrl: events.canonicalUrl,
       priceType: events.priceType,
+      priceMax: events.priceMax,
       priceMin: events.priceMin,
+      affiliateUrl: events.affiliateUrl,
       sourceSlug: sources.slug,
     })
     .from(events)
@@ -61,7 +64,7 @@ export default async function Home() {
                 venue: event.venue ?? "",
                 neighborhood: event.neighborhood ?? "",
                 isFree: event.priceType === "free",
-                priceCents: event.priceType === "paid" ? (event.priceMin ?? undefined) : undefined,
+                priceCents: event.priceType === "paid" ? (event.priceMax ?? event.priceMin ?? undefined) : undefined,
                 source: { slug: event.sourceSlug, label: event.sourceSlug },
                 url: event.canonicalUrl,
               };
@@ -69,6 +72,8 @@ export default async function Home() {
                 <li key={event.id}>
                   <EventCard
                     event={summary}
+                    tracked
+                    affiliateUrl={event.affiliateUrl}
                     saveButton={
                       <SaveButtonContainer
                         targetType="event"
@@ -84,6 +89,7 @@ export default async function Home() {
             })}
           </ul>
         )}
+        <AdSlot label="Sponsored" className="mt-8" />
       </main>
     </div>
   );
