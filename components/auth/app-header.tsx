@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 /** Session-aware nav. Presence of the sign-in link is the anonymous default —
  * browsing never requires an account. */
@@ -22,6 +23,7 @@ export async function AppHeader() {
           >
             Communities
           </Link>
+          <ThemeToggle />
           {session?.user ? (
             <span className="flex items-center gap-3">
               <span data-slot="nav-user">{session.user.name ?? session.user.email}</span>
