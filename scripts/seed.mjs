@@ -40,6 +40,8 @@ const [source] = await sql`
 
 const events = [
   {
+    // Fixed ids so e2e can hit /go/<id> directly.
+    id: "11111111-1111-4111-8111-111111111111",
     externalId: "curated-rooftop-film-night",
     title: "Rooftop Film Night — Williamsburg",
     description: "Outdoor screening of a classic NYC film, blankets provided.",
@@ -54,6 +56,7 @@ const events = [
     canonicalUrl: "https://luma.example.com/rooftop-film-night",
   },
   {
+    id: "22222222-2222-4222-8222-222222222222",
     externalId: "curated-prospect-park-cleanup",
     title: "Prospect Park Volunteer Cleanup",
     description: "Lend a hand with trail upkeep; gloves and bags supplied.",
@@ -68,6 +71,7 @@ const events = [
     canonicalUrl: "https://nycparks.example.com/events/prospect-park-cleanup",
   },
   {
+    id: "33333333-3333-4333-8333-333333333333",
     externalId: "curated-les-food-crawl",
     title: "Lower East Side Food Crawl",
     description: "Five stops, five tastings, one walking tour of the old neighborhood.",
@@ -86,10 +90,10 @@ const events = [
 for (const e of events) {
   await sql`
     INSERT INTO events
-      (source_id, external_id, canonical_url, title, description, starts_at,
+      (id, source_id, external_id, canonical_url, title, description, starts_at,
        venue, neighborhood, borough, price_type, price_min, price_max, affiliate_url)
     VALUES
-      (${source.id}, ${e.externalId}, ${e.canonicalUrl}, ${e.title}, ${e.description},
+      (${e.id}, ${source.id}, ${e.externalId}, ${e.canonicalUrl}, ${e.title}, ${e.description},
        ${e.startsAt}, ${e.venue}, ${e.neighborhood}, ${e.borough}, ${e.priceType},
        ${e.priceMin}, ${e.priceMax}, ${e.affiliateUrl})
     ON CONFLICT (source_id, external_id) DO UPDATE SET
