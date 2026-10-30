@@ -14,10 +14,7 @@ function toDate(instant: string | Date): Date {
 }
 
 /** Calendar-day key (YYYY-MM-DD) for an instant, in the supplied timezone. */
-export function dayKey(
-  instant: string | Date,
-  timeZone: string = DEFAULT_TIME_ZONE,
-): string {
+export function dayKey(instant: string | Date, timeZone: string = DEFAULT_TIME_ZONE): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone,
     year: "numeric",

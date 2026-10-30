@@ -147,16 +147,18 @@ describe("exactly-one-target CHECK", () => {
     const community = await seedCommunity();
 
     await expect(
-      db.insert(savedItems).values({ userId: user.id, eventId: event.id, communityId: community.id }),
+      db
+        .insert(savedItems)
+        .values({ userId: user.id, eventId: event.id, communityId: community.id }),
     ).rejects.toMatchObject({ cause: { code: "23514" } }); // check_violation
   });
 
   it("rejects a save with no target at all", async () => {
     const user = await seedUser();
 
-    await expect(
-      db.insert(savedItems).values({ userId: user.id }),
-    ).rejects.toMatchObject({ cause: { code: "23514" } });
+    await expect(db.insert(savedItems).values({ userId: user.id })).rejects.toMatchObject({
+      cause: { code: "23514" },
+    });
   });
 });
 

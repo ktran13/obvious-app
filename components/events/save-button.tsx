@@ -37,7 +37,7 @@ export function SaveButton({
         data-state="saved"
         onClick={onUnsave}
         className={cn(
-          "inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground",
+          "bg-primary text-primary-foreground inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium",
           className,
         )}
       >
@@ -55,7 +55,7 @@ export function SaveButton({
         data-state="prompting"
         onClick={onSignInClick}
         className={cn(
-          "inline-flex h-8 items-center rounded-lg border border-primary/40 bg-primary/10 px-2.5 text-sm font-medium text-primary",
+          "border-primary/40 bg-primary/10 text-primary inline-flex h-8 items-center rounded-lg border px-2.5 text-sm font-medium",
           className,
         )}
       >
@@ -71,7 +71,7 @@ export function SaveButton({
       data-state="idle"
       onClick={onSave}
       className={cn(
-        "inline-flex h-8 items-center rounded-lg border border-border bg-background px-2.5 text-sm font-medium hover:bg-muted",
+        "border-border bg-background hover:bg-muted inline-flex h-8 items-center rounded-lg border px-2.5 text-sm font-medium",
         className,
       )}
     >

@@ -16,9 +16,7 @@ describe("SaveButton", () => {
 
   it("renders the signed-out prompting state and fires onSignInClick", () => {
     const onSignInClick = vi.fn();
-    render(
-      <SaveButton state="prompting" onSignInClick={onSignInClick} />,
-    );
+    render(<SaveButton state="prompting" onSignInClick={onSignInClick} />);
 
     const button = screen.getByRole("button", { name: "Sign in to save" });
     expect(button).toHaveAttribute("data-state", "prompting");

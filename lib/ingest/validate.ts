@@ -50,7 +50,14 @@ export async function ingestSource<TRaw>(
   logger: IngestLogger = defaultLogger,
 ): Promise<IngestResult<TRaw>> {
   if (adapter.isEnabled && !adapter.isEnabled()) {
-    return { sourceSlug: adapter.sourceSlug, fetched: 0, skipped: true, accepted: [], rejected: [], raw: [] };
+    return {
+      sourceSlug: adapter.sourceSlug,
+      fetched: 0,
+      skipped: true,
+      accepted: [],
+      rejected: [],
+      raw: [],
+    };
   }
 
   const raw = await adapter.fetchRaw();
@@ -60,5 +67,12 @@ export async function ingestSource<TRaw>(
     logger,
   );
 
-  return { sourceSlug: adapter.sourceSlug, fetched: raw.length, skipped: false, accepted, rejected, raw };
+  return {
+    sourceSlug: adapter.sourceSlug,
+    fetched: raw.length,
+    skipped: false,
+    accepted,
+    rejected,
+    raw,
+  };
 }

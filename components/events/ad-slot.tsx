@@ -16,15 +16,13 @@ export function AdSlot({ className, label = "Ad slot" }: AdSlotProps) {
       data-slot="ad-slot"
       aria-label={label}
       className={cn(
-        "flex min-h-24 items-center justify-center rounded-xl border border-dashed border-border bg-muted/50 p-4 text-center",
+        "border-border bg-muted/50 flex min-h-24 items-center justify-center rounded-xl border border-dashed p-4 text-center",
         className,
       )}
     >
       <div>
-        <p className="text-sm font-medium text-muted-foreground">{label}</p>
-        <p className="text-xs text-muted-foreground/80">
-          Placeholder — no ad network is wired up.
-        </p>
+        <p className="text-muted-foreground text-sm font-medium">{label}</p>
+        <p className="text-muted-foreground/80 text-xs">Placeholder — no ad network is wired up.</p>
       </div>
     </aside>
   );

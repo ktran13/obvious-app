@@ -96,7 +96,9 @@ describe("Luma iCal adapter — sample fixture", () => {
 
   it("accepts every event in the sample through the Zod gate", async () => {
     const fetchImpl = vi.fn(async () => new Response(sample(), { status: 200 }));
-    const result = await ingestSource(new LumaIcalAdapter({ calendarUrl: "https://calendar.test/ics", fetchImpl }));
+    const result = await ingestSource(
+      new LumaIcalAdapter({ calendarUrl: "https://calendar.test/ics", fetchImpl }),
+    );
     expect(fetchImpl).toHaveBeenCalledOnce();
     expect(result.rejected).toEqual([]);
     expect(result.accepted).toHaveLength(5);
@@ -107,7 +109,9 @@ describe("Luma iCal adapter — sample fixture", () => {
 describe("Luma iCal adapter — malformed fixture", () => {
   it("rejects exactly the five broken events with specific issues", async () => {
     const fetchImpl = vi.fn(async () => new Response(malformed(), { status: 200 }));
-    const result = await ingestSource(new LumaIcalAdapter({ calendarUrl: "https://calendar.test/ics", fetchImpl }));
+    const result = await ingestSource(
+      new LumaIcalAdapter({ calendarUrl: "https://calendar.test/ics", fetchImpl }),
+    );
 
     expect(result.fetched).toBe(5);
     expect(result.accepted).toHaveLength(0);

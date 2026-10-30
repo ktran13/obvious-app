@@ -32,15 +32,15 @@ export default async function ProfilePage() {
       <AppHeader />
       <main className="mx-auto max-w-3xl px-4 py-8">
         <h1 className="text-2xl font-semibold">Your profile</h1>
-        <section className="mt-4 rounded-xl border border-border bg-card p-4" data-slot="identity">
+        <section className="border-border bg-card mt-4 rounded-xl border p-4" data-slot="identity">
           <p className="text-base font-medium">{account?.name ?? session.user.name}</p>
-          <p className="text-sm text-muted-foreground">{account?.email ?? session.user.email}</p>
+          <p className="text-muted-foreground text-sm">{account?.email ?? session.user.email}</p>
         </section>
 
         <section className="mt-8">
           <h2 className="text-lg font-semibold">Saved events</h2>
           {savedEvents.length === 0 ? (
-            <p className="mt-2 rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+            <p className="border-border text-muted-foreground mt-2 rounded-xl border border-dashed p-6 text-sm">
               Nothing saved yet — browse the events list and hit Save.
             </p>
           ) : (
@@ -49,11 +49,11 @@ export default async function ProfilePage() {
                 <li
                   key={event.eventId}
                   data-slot="saved-event"
-                  className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4"
+                  className="border-border bg-card flex items-center justify-between gap-4 rounded-xl border p-4"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{event.title}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       {event.venue ?? ""} ·{" "}
                       <a
                         href={event.canonicalUrl}
@@ -81,7 +81,7 @@ export default async function ProfilePage() {
         <section className="mt-8">
           <h2 className="text-lg font-semibold">Saved communities</h2>
           {savedCommunities.length === 0 ? (
-            <p className="mt-2 rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+            <p className="border-border text-muted-foreground mt-2 rounded-xl border border-dashed p-6 text-sm">
               No saved communities yet.
             </p>
           ) : (
@@ -90,12 +90,12 @@ export default async function ProfilePage() {
                 <li
                   key={community.communityId}
                   data-slot="saved-community"
-                  className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4"
+                  className="border-border bg-card flex items-center justify-between gap-4 rounded-xl border p-4"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{community.name}</p>
                     {community.description ? (
-                      <p className="text-sm text-muted-foreground">{community.description}</p>
+                      <p className="text-muted-foreground text-sm">{community.description}</p>
                     ) : null}
                   </div>
                   <SaveButtonContainer

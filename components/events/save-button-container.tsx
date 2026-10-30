@@ -42,9 +42,7 @@ export function SaveButtonContainer({
     return (
       <SaveButton
         state="prompting"
-        onSignInClick={() =>
-          router.push(`/signin?next=${encodeURIComponent(nextPath)}`)
-        }
+        onSignInClick={() => router.push(`/signin?next=${encodeURIComponent(nextPath)}`)}
       />
     );
   }

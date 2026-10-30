@@ -24,11 +24,11 @@ adapter.fetchRaw()  →  adapter.normalize(raw)  →  parsedEventSchema (Zod)  �
 
 ## Adapters
 
-| Adapter        | File                    | Raw items                       | Notes |
-|----------------|-------------------------|---------------------------------|-------|
+| Adapter        | File                    | Raw items                         | Notes                                                                                                                                                               |
+| -------------- | ----------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Luma iCal      | `adapters/luma-ical.ts` | VEVENT blocks from an iCal export | Set `calendarUrl` or `LUMA_CALENDAR_URL`. RFC 5545 reader in `adapters/ical-text.ts`. Recurrence is out of scope — Luma exports one concrete VEVENT per occurrence. |
-| Manual CSV     | `adapters/csv.ts`       | Data rows of a CSV file         | See CSV schema below. Default source slug `freenyc`. |
-| Meetup GraphQL | `adapters/meetup.ts`    | GraphQL `events.edges[].node`   | **Disabled by default.** Enabled only when `MEETUP_ENABLED=true`; disabled mode makes no network calls. |
+| Manual CSV     | `adapters/csv.ts`       | Data rows of a CSV file           | See CSV schema below. Default source slug `freenyc`.                                                                                                                |
+| Meetup GraphQL | `adapters/meetup.ts`    | GraphQL `events.edges[].node`     | **Disabled by default.** Enabled only when `MEETUP_ENABLED=true`; disabled mode makes no network calls.                                                             |
 
 Canonical URLs always link out to the source; the directory never re-hosts
 listings. Long descriptions are truncated to 5000 characters (the schema cap)
@@ -39,23 +39,23 @@ rather than dropping the event.
 The header row is required; column order does not matter. Required columns:
 `external_id`, `title`, `canonical_url`, `starts_at`. All others optional.
 
-| Column            | Format | Notes |
-|-------------------|--------|-------|
-| `external_id`     | nonempty text | Stable at the source; dedupe key with the source slug. |
-| `title`           | 1–300 chars | |
-| `canonical_url`   | absolute URL | Where the listing lives. |
-| `description`     | ≤ 5000 chars | Facts only — no expressive third-party copy. |
-| `starts_at`       | ISO 8601 | Explicit offset (`-05:00`), `Z`, or a naive local time (read as America/New_York). |
-| `ends_at`         | ISO 8601 or empty | Optional. |
-| `venue`           | text | |
-| `neighborhood`    | slug | e.g. `bushwick`, `sunset-park`. |
-| `borough`         | slug | `manhattan` \| `brooklyn` \| `queens` \| `bronx` \| `staten-island`. |
-| `price_type`      | `free` \| `paid` \| `unknown` | Empty = `unknown`; any other value rejects the row. |
-| `price_min_cents` | integer ≥ 0 | Cents; empty when free/unknown. |
-| `price_max_cents` | integer ≥ 0 | Cents. |
-| `affiliate_url`   | absolute URL or empty | Empty → canonical link-out only. |
-| `expires_at`      | ISO 8601 or empty | Hard staleness cutoff for takedown. |
-| `tags`            | `;`-separated | Prefixed slugs: `interest:tech`, `persona:kids`. Unknown prefixes reject the row. |
+| Column            | Format                        | Notes                                                                              |
+| ----------------- | ----------------------------- | ---------------------------------------------------------------------------------- |
+| `external_id`     | nonempty text                 | Stable at the source; dedupe key with the source slug.                             |
+| `title`           | 1–300 chars                   |                                                                                    |
+| `canonical_url`   | absolute URL                  | Where the listing lives.                                                           |
+| `description`     | ≤ 5000 chars                  | Facts only — no expressive third-party copy.                                       |
+| `starts_at`       | ISO 8601                      | Explicit offset (`-05:00`), `Z`, or a naive local time (read as America/New_York). |
+| `ends_at`         | ISO 8601 or empty             | Optional.                                                                          |
+| `venue`           | text                          |                                                                                    |
+| `neighborhood`    | slug                          | e.g. `bushwick`, `sunset-park`.                                                    |
+| `borough`         | slug                          | `manhattan` \| `brooklyn` \| `queens` \| `bronx` \| `staten-island`.               |
+| `price_type`      | `free` \| `paid` \| `unknown` | Empty = `unknown`; any other value rejects the row.                                |
+| `price_min_cents` | integer ≥ 0                   | Cents; empty when free/unknown.                                                    |
+| `price_max_cents` | integer ≥ 0                   | Cents.                                                                             |
+| `affiliate_url`   | absolute URL or empty         | Empty → canonical link-out only.                                                   |
+| `expires_at`      | ISO 8601 or empty             | Hard staleness cutoff for takedown.                                                |
+| `tags`            | `;`-separated                 | Prefixed slugs: `interest:tech`, `persona:kids`. Unknown prefixes reject the row.  |
 
 Example rows live in `fixtures/manual-events.csv`; deliberately broken rows
 in `fixtures/manual-events-malformed.csv` are covered by tests.

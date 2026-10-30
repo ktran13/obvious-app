@@ -8,7 +8,7 @@ export async function AppHeader() {
   const session = await auth();
 
   return (
-    <header className="border-b border-border">
+    <header className="border-border border-b">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
         <Link href="/" className="text-base font-semibold">
           NYC Discovery
@@ -24,12 +24,18 @@ export async function AppHeader() {
           {session?.user ? (
             <span className="flex items-center gap-3">
               <span data-slot="nav-user">{session.user.name ?? session.user.email}</span>
-              <Link href="/profile" className="font-medium text-primary underline-offset-4 hover:underline">
+              <Link
+                href="/profile"
+                className="text-primary font-medium underline-offset-4 hover:underline"
+              >
                 Profile
               </Link>
             </span>
           ) : (
-            <Link href="/signin" className="font-medium text-primary underline-offset-4 hover:underline">
+            <Link
+              href="/signin"
+              className="text-primary font-medium underline-offset-4 hover:underline"
+            >
               Sign in
             </Link>
           )}
